@@ -1,0 +1,28 @@
+# Dependencies
+node_modules/
+client/node_modules/
+
+# Environment Variables (CRITICAL: Do NOT push secrets to GitHub)
+.env
+.env.local
+.env.*.local
+client/.env
+client/.env.local
+
+# Production Builds
+dist/
+client/dist/
+build/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# Binaries & OS files
+stripe.exe
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
