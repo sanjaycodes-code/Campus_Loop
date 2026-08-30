@@ -3,7 +3,30 @@ import { io } from 'socket.io-client';
 
 const SocketContext = createContext(null);
 
-const SOCKET_URL = import.meta.env.VITE_SOCKET_URL || 'http://localhost:5000';
+/**
+ * Resolve Socket.io connection URL:
+ * 1. Uses VITE_SOCKET_URL if provided.
+ * 2. Derives from VITE_API_URL / VITE_API_BASE_URL.
+ * 3. Falls back to deployed Render backend in production builds.
+ * 4. Falls back to http://localhost:5000 in local development.
+ */
+const getSocketUrl = () => {
+  const envSocketUrl = import.meta.env.VITE_SOCKET_URL;
+  if (envSocketUrl) return envSocketUrl;
+
+  const envApiUrl = import.meta.env.VITE_API_URL || import.meta.env.VITE_API_BASE_URL;
+  if (envApiUrl) {
+    return envApiUrl.replace(/\/api\/?$/, '');
+  }
+
+  if (import.meta.env.PROD) {
+    return 'https://campus-loop-jxca.onrender.com';
+  }
+
+  return 'http://localhost:5000';
+};
+
+const SOCKET_URL = getSocketUrl();
 
 export const SocketProvider = ({ children }) => {
   const [socket, setSocket] = useState(null);
@@ -21,7 +44,7 @@ export const SocketProvider = ({ children }) => {
 
     // 2. On connection established
     newSocket.on('connect', () => {
-      console.log(`%c[Socket.io] Connected to server with ID: ${newSocket.id}`, 'color: #0284c7; font-weight: bold;');
+      console.log(`%c[Socket.io] Connected to server (${SOCKET_URL}) with ID: ${newSocket.id}`, 'color: #0284c7; font-weight: bold;');
       setIsConnected(true);
 
       // 3. Emit initial 'ping' test event to backend

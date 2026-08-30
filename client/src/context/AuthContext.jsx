@@ -67,10 +67,14 @@ export const AuthProvider = ({ children }) => {
 
       return { success: true, user: receivedUser };
     } catch (err) {
+      const isDev = import.meta.env.DEV;
+      const networkMessage = isDev
+        ? 'Cannot connect to local backend (port 5000). Make sure npm run dev is running.'
+        : 'Cannot connect to backend server. If the server was sleeping, please wait a moment and try again.';
       const message =
         err.response?.data?.message ||
         (err.code === 'ERR_NETWORK' || !err.response
-          ? 'Cannot connect to backend server. Make sure your backend (npm run dev on port 5000) is running.'
+          ? networkMessage
           : 'Registration failed. Please check your details.');
       setAuthError(message);
       return { success: false, error: message };
@@ -97,10 +101,14 @@ export const AuthProvider = ({ children }) => {
 
       return { success: true, user: receivedUser };
     } catch (err) {
+      const isDev = import.meta.env.DEV;
+      const networkMessage = isDev
+        ? 'Cannot connect to local backend (port 5000). Make sure npm run dev is running.'
+        : 'Cannot connect to backend server. If the server was sleeping, please wait a moment and try again.';
       const message =
         err.response?.data?.message ||
         (err.code === 'ERR_NETWORK' || !err.response
-          ? 'Cannot connect to backend server. Make sure your backend (npm run dev on port 5000) is running.'
+          ? networkMessage
           : 'Invalid email or password. Please try again.');
       setAuthError(message);
       return { success: false, error: message };
