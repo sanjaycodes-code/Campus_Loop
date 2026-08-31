@@ -135,6 +135,9 @@ const Marketplace = () => {
     fetchListings();
   }, [fetchListings]);
 
+  // Real-time animation pulse indicator
+  const [recentlyUpdatedListingId, setRecentlyUpdatedListingId] = useState(null);
+
   // 4. Real-time availability status listener (Socket.io)
   useEffect(() => {
     if (!socket) return;
@@ -144,6 +147,12 @@ const Marketplace = () => {
         `%c[Socket.io] Realtime Status Update for "${data.title}": isAvailable -> ${data.isAvailable}`,
         'color: #0284c7; font-weight: bold; background: #f0f9ff; padding: 2px 6px; border-radius: 4px;'
       );
+
+      // Trigger status pulse animation on the specific card
+      if (data.listingId) {
+        setRecentlyUpdatedListingId(data.listingId);
+        setTimeout(() => setRecentlyUpdatedListingId(null), 1500);
+      }
 
       setListings((prevListings) =>
         prevListings.map((item) =>
@@ -242,7 +251,7 @@ const Marketplace = () => {
 
           <Link
             to="/listings/new"
-            className="self-start sm:self-center inline-flex items-center gap-2 px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-xs sm:text-sm rounded-xl shadow-md shadow-indigo-600/20 active:scale-[0.98] transition-all cursor-pointer"
+            className="self-start sm:self-center inline-flex items-center gap-2 px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-xs sm:text-sm rounded-xl shadow-md shadow-indigo-600/20 btn-press-snap cursor-pointer"
           >
             <PlusCircle className="w-4 h-4" />
             <span>List an Item</span>
@@ -264,7 +273,7 @@ const Marketplace = () => {
                 {hasActiveFilters && (
                   <button
                     onClick={clearFilters}
-                    className="text-[11px] font-semibold text-rose-600 hover:text-rose-700 flex items-center gap-1 cursor-pointer transition-colors"
+                    className="text-[11px] font-semibold text-rose-600 hover:text-rose-700 flex items-center gap-1 cursor-pointer transition-colors btn-press-snap"
                   >
                     <RotateCcw className="w-3 h-3" />
                     <span>Reset</span>
@@ -285,7 +294,7 @@ const Marketplace = () => {
                       <button
                         key={cat.id}
                         onClick={() => handleCategoryChange(cat.id)}
-                        className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs transition-all cursor-pointer ${
+                        className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs btn-press-snap cursor-pointer ${
                           isSelected
                             ? 'bg-indigo-50 text-indigo-800 font-bold border border-indigo-200/80 shadow-2xs'
                             : 'text-slate-600 hover:bg-slate-50 border border-transparent font-medium'
@@ -662,15 +671,18 @@ const Marketplace = () => {
             {/* Listings Grid */}
             {!loading && !error && listings.length > 0 && (
               <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5">
-                {listings.map((item) => {
+                {listings.map((item, idx) => {
                   const primaryImage =
                     item.images && item.images.length > 0 ? item.images[0] : null;
+                  const isRecentlyUpdated = recentlyUpdatedListingId === item._id;
+                  const staggerDelay = `${Math.min(idx * 30, 210)}ms`;
 
                   return (
                     <Link
                       key={item._id}
                       to={`/listings/${item._id}`}
-                      className="group bg-white rounded-2xl border border-slate-200/80 hover:border-indigo-300 hover:shadow-lg hover:shadow-indigo-500/5 transition-all duration-200 flex flex-col justify-between overflow-hidden"
+                      style={{ animationDelay: staggerDelay }}
+                      className="group bg-white rounded-2xl border border-slate-200/80 hover:border-indigo-300 hover:shadow-lg hover:shadow-indigo-500/5 card-hover-lift animate-card-reflow flex flex-col justify-between overflow-hidden"
                     >
                       {/* Card Image / Themed Empty State Placeholder */}
                       <div className="relative h-44 overflow-hidden flex items-center justify-center bg-slate-100">
@@ -720,17 +732,19 @@ const Marketplace = () => {
                           </span>
                         </div>
 
-                        {/* Availability Status Pill (Primary Status Indicator) */}
+                        {/* Availability Status Pill (Primary Status Indicator with Live Pulse) */}
                         <div className="absolute top-3 right-3">
                           <span
-                            className={`inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full border backdrop-blur-md shadow-xs ${
+                            className={`inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full border backdrop-blur-md shadow-xs pill-status-transition ${
+                              isRecentlyUpdated ? 'animate-status-update ring-2 ring-emerald-400 ring-offset-1' : ''
+                            } ${
                               item.isAvailable
                                 ? 'bg-white/95 text-emerald-700 border-emerald-200/90'
                                 : 'bg-slate-900/90 text-slate-200 border-slate-800'
                             }`}
                           >
                             <span
-                              className={`w-1.5 h-1.5 rounded-full ${
+                              className={`w-1.5 h-1.5 rounded-full transition-colors duration-200 ${
                                 item.isAvailable ? 'bg-emerald-500 animate-pulse' : 'bg-slate-400'
                               }`}
                             />
