@@ -14,7 +14,10 @@ if (stripeKey && stripeKey.startsWith('sk_test_') && stripeKey !== 'sk_test_plac
  * Helper to generate a Stripe Checkout Session
  */
 async function generateStripeCheckoutSession({ booking, populatedListing, req }) {
-  const clientUrl = process.env.CLIENT_URL || 'http://localhost:5173';
+  // Dynamically resolve client frontend URL from request headers (origin/referer) or env
+  const origin = req?.headers?.origin || (req?.headers?.referer ? new URL(req.headers.referer).origin : null);
+  let clientUrl = origin || process.env.CLIENT_URL || 'https://campus-loop-ten.vercel.app';
+  if (clientUrl.endsWith('/')) clientUrl = clientUrl.slice(0, -1);
   const startFormatted = new Date(booking.startDate).toLocaleDateString();
   const endFormatted = new Date(booking.endDate).toLocaleDateString();
   const listingTitle = populatedListing?.title || 'Campus Rental Item';
