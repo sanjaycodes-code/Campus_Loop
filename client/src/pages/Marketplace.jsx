@@ -288,155 +288,152 @@ const Marketplace = () => {
         </div>
       </section>
 
-      {/* Main Container with Sidebar + Grid */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-1 w-full">
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-          {/* ================= LEFT SIDEBAR (Desktop) ================= */}
-          <aside className="hidden lg:block lg:col-span-1 space-y-6 sticky top-24 self-start">
-            <div className="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs space-y-5">
-              <div className="flex items-center justify-between pb-3 border-b border-slate-100">
-                <div className="flex items-center gap-2 text-slate-900 font-bold text-xs uppercase tracking-wider">
-                  <SlidersHorizontal className="w-3.5 h-3.5 text-indigo-600" />
-                  <span>Search & Filters</span>
-                </div>
-                {hasActiveFilters && (
+      {/* Main Container with Full-Height Sidebar Panel + Grid Area */}
+      <div className="max-w-7xl mx-auto w-full flex-1 flex flex-col lg:flex-row border-x border-slate-200/80 bg-white min-h-[calc(100vh-260px)]">
+        {/* ================= LEFT FULL-HEIGHT SIDEBAR PANEL (Desktop) ================= */}
+        <aside className="hidden lg:flex lg:w-72 lg:flex-col shrink-0 bg-slate-50/90 border-r border-slate-200/90 p-6 space-y-6">
+          <div className="flex items-center justify-between pb-3.5 border-b border-slate-200/80">
+            <div className="flex items-center gap-2 text-slate-900 font-bold text-xs uppercase tracking-wider">
+              <SlidersHorizontal className="w-3.5 h-3.5 text-indigo-600" />
+              <span>Filters & Browse</span>
+            </div>
+            {hasActiveFilters && (
+              <button
+                onClick={clearFilters}
+                className="text-[11px] font-semibold text-rose-600 hover:text-rose-700 flex items-center gap-1 cursor-pointer transition-colors btn-press-snap"
+              >
+                <RotateCcw className="w-3 h-3" />
+                <span>Reset</span>
+              </button>
+            )}
+          </div>
+
+          {/* 1. Category Filter */}
+          <div>
+            <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-2.5">
+              Category
+            </label>
+            <div className="space-y-1">
+              {CATEGORIES.map((cat) => {
+                const Icon = cat.icon;
+                const isSelected = category === cat.id;
+                return (
                   <button
-                    onClick={clearFilters}
-                    className="text-[11px] font-semibold text-rose-600 hover:text-rose-700 flex items-center gap-1 cursor-pointer transition-colors btn-press-snap"
+                    key={cat.id}
+                    onClick={() => handleCategoryChange(cat.id)}
+                    className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all duration-150 btn-press-snap cursor-pointer ${
+                      isSelected
+                        ? 'bg-indigo-600 text-white shadow-sm shadow-indigo-600/20'
+                        : 'text-slate-700 hover:bg-white hover:text-slate-900'
+                    }`}
                   >
-                    <RotateCcw className="w-3 h-3" />
-                    <span>Reset</span>
+                    <div className="flex items-center gap-2.5">
+                      <Icon className={`w-3.5 h-3.5 ${isSelected ? 'text-white' : 'text-slate-400'}`} />
+                      <span>{cat.label}</span>
+                    </div>
+                    {isSelected && <CheckCircle2 className="w-3.5 h-3.5 text-white" />}
                   </button>
-                )}
-              </div>
+                );
+              })}
+            </div>
+          </div>
 
-              {/* 1. Category Filter */}
+          {/* 2. Price Range (Min & Max Daily Rate) */}
+          <div>
+            <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-2.5">
+              Daily Rate (₹ / day)
+            </label>
+            <div className="grid grid-cols-2 gap-2">
               <div>
-                <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-2">
-                  Category
-                </label>
-                <div className="space-y-1">
-                  {CATEGORIES.map((cat) => {
-                    const Icon = cat.icon;
-                    const isSelected = category === cat.id;
-                    return (
-                      <button
-                        key={cat.id}
-                        onClick={() => handleCategoryChange(cat.id)}
-                        className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs btn-press-snap cursor-pointer ${
-                          isSelected
-                            ? 'bg-indigo-50 text-indigo-800 font-bold border border-indigo-200/80 shadow-2xs'
-                            : 'text-slate-600 hover:bg-slate-50 border border-transparent font-medium'
-                        }`}
-                      >
-                        <div className="flex items-center gap-2.5">
-                          <Icon className={`w-3.5 h-3.5 ${isSelected ? 'text-indigo-600' : 'text-slate-400'}`} />
-                          <span>{cat.label}</span>
-                        </div>
-                        {isSelected && <CheckCircle2 className="w-3.5 h-3.5 text-indigo-600" />}
-                      </button>
-                    );
-                  })}
+                <div className="relative">
+                  <span className="absolute inset-y-0 left-0 pl-2.5 flex items-center pointer-events-none text-slate-400 text-xs font-semibold">₹</span>
+                  <input
+                    type="number"
+                    min="0"
+                    value={minPrice}
+                    onChange={(e) => {
+                      setMinPrice(e.target.value);
+                      setPage(1);
+                    }}
+                    placeholder="Min"
+                    className="w-full pl-6 pr-2.5 py-1.5 h-9 bg-white border border-slate-200 rounded-xl text-xs font-medium text-slate-900 placeholder:text-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all duration-150 shadow-2xs"
+                  />
                 </div>
               </div>
-
-              {/* 2. Price Range (Min & Max Daily Rate) */}
               <div>
-                <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-2">
-                  Daily Rate (₹ / day)
-                </label>
-                <div className="grid grid-cols-2 gap-2">
-                  <div>
-                    <div className="relative">
-                      <span className="absolute inset-y-0 left-0 pl-2.5 flex items-center pointer-events-none text-slate-400 text-xs font-semibold">₹</span>
-                      <input
-                        type="number"
-                        min="0"
-                        value={minPrice}
-                        onChange={(e) => {
-                          setMinPrice(e.target.value);
-                          setPage(1);
-                        }}
-                        placeholder="Min"
-                        className="w-full pl-6 pr-2.5 py-1.5 h-9 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium text-slate-900 placeholder:text-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all"
-                      />
-                    </div>
-                  </div>
-                  <div>
-                    <div className="relative">
-                      <span className="absolute inset-y-0 left-0 pl-2.5 flex items-center pointer-events-none text-slate-400 text-xs font-semibold">₹</span>
-                      <input
-                        type="number"
-                        min="0"
-                        value={maxPrice}
-                        onChange={(e) => {
-                          setMaxPrice(e.target.value);
-                          setPage(1);
-                        }}
-                        placeholder="Max"
-                        className="w-full pl-6 pr-2.5 py-1.5 h-9 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium text-slate-900 placeholder:text-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all"
-                      />
-                    </div>
-                  </div>
+                <div className="relative">
+                  <span className="absolute inset-y-0 left-0 pl-2.5 flex items-center pointer-events-none text-slate-400 text-xs font-semibold">₹</span>
+                  <input
+                    type="number"
+                    min="0"
+                    value={maxPrice}
+                    onChange={(e) => {
+                      setMaxPrice(e.target.value);
+                      setPage(1);
+                    }}
+                    placeholder="Max"
+                    className="w-full pl-6 pr-2.5 py-1.5 h-9 bg-white border border-slate-200 rounded-xl text-xs font-medium text-slate-900 placeholder:text-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all duration-150 shadow-2xs"
+                  />
                 </div>
-                {minPrice !== '' && maxPrice !== '' && Number(minPrice) > Number(maxPrice) && (
-                  <p className="text-[10px] text-amber-600 mt-1.5 font-medium">
-                    Min rate exceeds Max rate.
-                  </p>
-                )}
-              </div>
-
-              {/* 3. Availability Filter (Segmented Control) */}
-              <div>
-                <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-2">
-                  Availability
-                </label>
-                <div className="bg-slate-100 p-1 rounded-xl grid grid-cols-3 gap-1">
-                  {[
-                    { id: 'all', label: 'All' },
-                    { id: 'true', label: 'In Stock' },
-                    { id: 'false', label: 'Rented' },
-                  ].map((item) => {
-                    const isSelected = isAvailable === item.id;
-                    return (
-                      <button
-                        key={item.id}
-                        onClick={() => handleAvailabilityChange(item.id)}
-                        className={`py-1.5 px-2 rounded-lg text-xs transition-all text-center cursor-pointer ${
-                          isSelected
-                            ? 'bg-white text-slate-900 font-bold shadow-xs'
-                            : 'text-slate-500 hover:text-slate-800 font-medium'
-                        }`}
-                      >
-                        {item.label}
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-
-              {/* 4. Condition Filter */}
-              <div>
-                <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-2">
-                  Item Condition
-                </label>
-                <select
-                  value={condition}
-                  onChange={(e) => handleConditionChange(e.target.value)}
-                  className="w-full h-9 px-3 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-800 font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all cursor-pointer"
-                >
-                  {CONDITIONS.map((cond) => (
-                    <option key={cond.id} value={cond.id}>
-                      {cond.label}
-                    </option>
-                  ))}
-                </select>
               </div>
             </div>
-          </aside>
+            {minPrice !== '' && maxPrice !== '' && Number(minPrice) > Number(maxPrice) && (
+              <p className="text-[10px] text-amber-600 mt-1.5 font-medium">
+                Min rate exceeds Max rate.
+              </p>
+            )}
+          </div>
 
-          {/* ================= RIGHT COLUMN (Search + Grid) ================= */}
-          <main className="lg:col-span-3 space-y-6">
+          {/* 3. Availability Filter (Segmented Control) */}
+          <div>
+            <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-2.5">
+              Availability
+            </label>
+            <div className="bg-slate-200/70 p-1 rounded-xl grid grid-cols-3 gap-1">
+              {[
+                { id: 'all', label: 'All' },
+                { id: 'true', label: 'In Stock' },
+                { id: 'false', label: 'Rented' },
+              ].map((item) => {
+                const isSelected = isAvailable === item.id;
+                return (
+                  <button
+                    key={item.id}
+                    onClick={() => handleAvailabilityChange(item.id)}
+                    className={`py-1.5 px-2 rounded-lg text-xs transition-all duration-150 text-center cursor-pointer btn-press-snap ${
+                      isSelected
+                        ? 'bg-white text-slate-900 font-bold shadow-2xs'
+                        : 'text-slate-600 hover:text-slate-900 font-medium'
+                    }`}
+                  >
+                    {item.label}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* 4. Condition Filter */}
+          <div>
+            <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-2.5">
+              Item Condition
+            </label>
+            <select
+              value={condition}
+              onChange={(e) => handleConditionChange(e.target.value)}
+              className="w-full h-9 px-3 bg-white border border-slate-200 rounded-xl text-xs text-slate-800 font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all duration-150 cursor-pointer shadow-2xs"
+            >
+              {CONDITIONS.map((cond) => (
+                <option key={cond.id} value={cond.id}>
+                  {cond.label}
+                </option>
+              ))}
+            </select>
+          </div>
+        </aside>
+
+        {/* ================= RIGHT RESULTS AREA ================= */}
+        <main className="flex-1 bg-slate-100/70 p-4 sm:p-6 lg:p-8 space-y-6">
             {/* Top Search Bar & Sort Row */}
             <div className="bg-white p-3 sm:p-4 rounded-2xl border border-slate-200/80 shadow-xs flex flex-col sm:flex-row gap-3 items-stretch sm:items-center justify-between">
               {/* Search Box */}
@@ -832,7 +829,6 @@ const Marketplace = () => {
           </main>
         </div>
       </div>
-    </div>
   );
 };
 
