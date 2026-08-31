@@ -245,40 +245,41 @@ const Marketplace = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50/80 flex flex-col font-sans text-slate-800">
+    <div className="min-h-screen bg-slate-100/90 flex flex-col font-sans text-slate-800">
       <Navbar />
 
-      {/* Hero / Banner Header with GSAP Scrubbed Zoom */}
+      {/* Hero / Banner Header with GSAP Scrubbed Zoom (Bold Collegiate Night Anchor) */}
       <section
         ref={heroContainerRef}
-        className="relative bg-white border-b border-slate-200/70 py-6 px-4 sm:px-6 lg:px-8 overflow-hidden"
+        className="relative bg-slate-900 border-b border-slate-800/90 py-8 px-4 sm:px-6 lg:px-8 overflow-hidden text-white shadow-xs"
       >
-        {/* Subtle decorative background gradient mesh that zooms smoothly on scroll */}
+        {/* Deep ambient radial glow and gradient mesh */}
         <div
           ref={heroVisualRef}
-          className="absolute inset-0 bg-gradient-to-r from-indigo-50/50 via-purple-50/30 to-sky-50/40 pointer-events-none origin-center"
+          className="absolute inset-0 bg-gradient-to-r from-indigo-950 via-slate-900 to-indigo-900 pointer-events-none origin-center opacity-95"
         />
+        <div className="absolute top-0 right-1/4 w-96 h-96 bg-indigo-600/15 rounded-full blur-3xl pointer-events-none" />
 
         <div
           ref={heroTextRef}
           className="max-w-7xl mx-auto flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 relative z-10"
         >
           <div>
-            <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-indigo-50 border border-indigo-100 text-indigo-700 text-[11px] font-semibold mb-2 shadow-2xs">
-              <ShieldCheck className="w-3.5 h-3.5 text-indigo-600" />
+            <div className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-indigo-900/70 border border-indigo-700/60 text-indigo-200 text-[11px] font-semibold mb-2.5 shadow-2xs">
+              <ShieldCheck className="w-3.5 h-3.5 text-indigo-400" />
               <span>NIT Durgapur Verified Peer Network</span>
             </div>
-            <h1 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
+            <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
               Campus Rental Marketplace
             </h1>
-            <p className="mt-1 text-xs sm:text-sm text-slate-500">
-              Borrow & share scientific calculators, engineering textbooks, lab supplies, and tech accessories.
+            <p className="mt-1.5 text-xs sm:text-sm text-slate-300 font-normal max-w-xl leading-relaxed">
+              Borrow & share scientific calculators, engineering textbooks, lab supplies, and tech accessories safely with peers on campus.
             </p>
           </div>
 
           <Link
             to="/listings/new"
-            className="self-start sm:self-center inline-flex items-center gap-2 px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-xs sm:text-sm rounded-xl shadow-md shadow-indigo-600/20 btn-press-snap cursor-pointer"
+            className="self-start sm:self-center inline-flex items-center gap-2 px-4 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-xs sm:text-sm rounded-xl shadow-lg shadow-indigo-600/30 border border-indigo-500/40 btn-press-snap cursor-pointer transition-all"
           >
             <PlusCircle className="w-4 h-4" />
             <span>List an Item</span>
