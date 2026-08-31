@@ -411,6 +411,26 @@ const deleteListing = async (req, res) => {
       });
     }
 
+    // DEMO MODE GUARD: Protect core sample listings from permanent deletion by guest reviewers
+    const protectedTitles = [
+      'Texas Instruments TI-84 Plus CE Graphing Calculator',
+      'Introduction to Algorithms (CLRS 4th Edition)',
+      'Sony WH-1000XM4 Active Noise-Cancelling Headphones',
+    ];
+
+    if (
+      (req.user.isGuest || req.user.email === 'guest@nitdgp.ac.in') &&
+      protectedTitles.includes(listing.title)
+    ) {
+      return res.status(200).json({
+        success: true,
+        message:
+          'Action simulated: Core sample listings are preserved in Demo Mode for upcoming reviewers.',
+        isSimulated: true,
+        deletedId: id,
+      });
+    }
+
     await Listing.findByIdAndDelete(id);
 
     return res.status(200).json({

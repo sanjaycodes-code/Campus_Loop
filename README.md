@@ -28,6 +28,24 @@ Built with real-time Socket.io communication, atomic date-range booking conflict
 
 ---
 
+## ⚡ Guest / Demo Mode (For Reviewers & Interviewers)
+
+CampusLoop includes an instant **Guest / Demo Mode** allowing reviewers to explore all student rental and booking features without needing an official NIT Durgapur institute email:
+
+- **1-Click Access:** On the [Login Page](https://campus-loop-ten.vercel.app/login), click **`⚡ Continue as Guest (Demo Mode)`**.
+- **Demo Credentials:**
+  - **Email:** `guest@nitdgp.ac.in`
+  - **Password:** `DemoGuest123!`
+- **What's Pre-Seeded:**
+  - 3 items owned by Guest Reviewer (*TI-84 Plus Graphing Calculator*, *CLRS Algorithms Book*, *Sony XM4 Headphones*).
+  - 4 items owned by peer students (*Casio FX-991CW*, *Higher Engg Math*, *Mini Drafter*, *Raspberry Pi 4*).
+  - Pre-populated rental bookings across pending, confirmed, and active states for both Renter and Host perspectives.
+- **On-Demand Reseeding (Before an Interview):**
+  - **Via CLI:** `npm run seed:demo`
+  - **Via HTTP API:** `POST https://campus-loop-jxca.onrender.com/api/auth/reseed-demo`
+
+---
+
 ## 🛠️ Tech Stack
 
 ### Frontend

@@ -9,6 +9,7 @@
     "client": "npm run dev --prefix client",
     "predev": "node scripts/kill-ports.js",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "seed:demo": "node scripts/seed-demo-mode.js",
     "stripe:listen": ".\\stripe.exe listen --forward-to localhost:5000/api/webhooks/stripe",
     "stripe:trigger": ".\\stripe.exe trigger checkout.session.completed"
   },

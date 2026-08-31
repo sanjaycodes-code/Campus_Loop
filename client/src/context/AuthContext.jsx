@@ -116,6 +116,36 @@ export const AuthProvider = ({ children }) => {
   };
 
   /**
+   * Login as Guest Demo User
+   */
+  const guestLogin = async () => {
+    setAuthError(null);
+    try {
+      const response = await api.post('/auth/guest-login');
+      const { token: receivedToken, user: receivedUser } = response.data;
+
+      // Persist in localStorage and in-memory state
+      localStorage.setItem('campusloop_token', receivedToken);
+      setToken(receivedToken);
+      setUser(receivedUser);
+
+      return { success: true, user: receivedUser };
+    } catch (err) {
+      const isDev = import.meta.env.DEV;
+      const networkMessage = isDev
+        ? 'Cannot connect to local backend (port 5000). Make sure npm run dev is running.'
+        : 'Cannot connect to backend server. If the server was sleeping, please wait a moment and try again.';
+      const message =
+        err.response?.data?.message ||
+        (err.code === 'ERR_NETWORK' || !err.response
+          ? networkMessage
+          : 'Failed to enter Demo Mode. Please try again.');
+      setAuthError(message);
+      return { success: false, error: message };
+    }
+  };
+
+  /**
    * Logout user and clear tokens
    */
   const logout = () => {
@@ -135,6 +165,7 @@ export const AuthProvider = ({ children }) => {
     isAuthenticated: !!token && !!user,
     register,
     login,
+    guestLogin,
     logout,
     clearAuthError,
   };

@@ -186,8 +186,71 @@ const getMe = async (req, res) => {
   }
 };
 
+const { seedDemoData } = require('../utils/demoSeeder');
+
+/**
+ * @desc    Authenticate or auto-seed Guest Demo user
+ * @route   POST /api/auth/guest-login
+ * @access  Public
+ */
+const guestLogin = async (req, res) => {
+  try {
+    const guestUser = await seedDemoData();
+    const token = generateToken(guestUser._id);
+
+    return res.status(200).json({
+      success: true,
+      message: 'Logged in successfully as Guest Reviewer (Demo Mode)',
+      token,
+      user: {
+        _id: guestUser._id,
+        name: guestUser.name,
+        email: guestUser.email,
+        campus: guestUser.campus,
+        phone: guestUser.phone,
+        role: guestUser.role,
+        avatar: guestUser.avatar,
+        isVerified: guestUser.isVerified,
+        isGuest: true,
+        createdAt: guestUser.createdAt,
+      },
+    });
+  } catch (error) {
+    console.error('Guest login error:', error);
+    return res.status(500).json({
+      success: false,
+      message: 'Failed to initialize demo guest session',
+      error: error.message,
+    });
+  }
+};
+
+/**
+ * @desc    On-demand reseed demo data
+ * @route   POST /api/auth/reseed-demo
+ * @access  Public
+ */
+const reseedDemo = async (req, res) => {
+  try {
+    await seedDemoData();
+    return res.status(200).json({
+      success: true,
+      message: 'Demo data refreshed and verified successfully',
+    });
+  } catch (error) {
+    console.error('Reseed demo error:', error);
+    return res.status(500).json({
+      success: false,
+      message: 'Failed to reseed demo data',
+      error: error.message,
+    });
+  }
+};
+
 module.exports = {
   register,
   login,
+  guestLogin,
+  reseedDemo,
   getMe,
 };
