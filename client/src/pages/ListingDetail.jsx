@@ -23,6 +23,7 @@ import {
   MessageSquare,
   RefreshCw,
 } from 'lucide-react';
+import useScrollZoom from '../hooks/useScrollZoom';
 
 const ListingDetail = () => {
   const { id } = useParams();
@@ -55,6 +56,17 @@ const ListingDetail = () => {
   const [bookingSubmitting, setBookingSubmitting] = useState(false);
   const [bookingConflictError, setBookingConflictError] = useState('');
   const [bookingSuccessData, setBookingSuccessData] = useState(null);
+
+  // GSAP ScrollTrigger Hero Zoom on Product Image
+  const {
+    containerRef: imageContainerRef,
+    visualRef: imageVisualRef,
+  } = useScrollZoom({
+    zoomScale: 1.16,
+    start: 'top 80px',
+    end: 'bottom top',
+    scrub: 1,
+  });
 
   useEffect(() => {
     const fetchListing = async () => {
@@ -494,26 +506,32 @@ const ListingDetail = () => {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
           {/* Left Column: Image Gallery & Description */}
           <div className="lg:col-span-7 space-y-6">
-            {/* Main Image Showcase */}
-            <div className="relative bg-slate-100 rounded-2xl border border-slate-200 overflow-hidden aspect-[4/3] flex items-center justify-center shadow-xs">
+            {/* Main Image Showcase with GSAP Scroll Zoom */}
+            <div
+              ref={imageContainerRef}
+              className="relative bg-slate-100 rounded-2xl border border-slate-200 overflow-hidden aspect-[4/3] flex items-center justify-center shadow-xs"
+            >
               {images.length > 0 ? (
-                <img
-                  src={images[selectedImage] || images[0]}
-                  alt={listing.title}
-                  referrerPolicy="no-referrer"
-                  className="w-full h-full object-contain"
-                  onError={(e) => {
-                    e.currentTarget.style.display = 'none';
-                    if (e.currentTarget.nextSibling) {
-                      e.currentTarget.nextSibling.style.display = 'flex';
-                    }
-                  }}
-                />
+                <div ref={imageVisualRef} className="w-full h-full flex items-center justify-center origin-center">
+                  <img
+                    src={images[selectedImage] || images[0]}
+                    alt={listing.title}
+                    referrerPolicy="no-referrer"
+                    className="w-full h-full object-contain"
+                    onError={(e) => {
+                      e.currentTarget.style.display = 'none';
+                      if (e.currentTarget.nextSibling) {
+                        e.currentTarget.nextSibling.style.display = 'flex';
+                      }
+                    }}
+                  />
+                </div>
               ) : null}
 
               <div
+                ref={images.length === 0 ? imageVisualRef : undefined}
                 style={{ display: images.length > 0 ? 'none' : 'flex' }}
-                className="flex flex-col items-center justify-center text-slate-400 p-8"
+                className="flex flex-col items-center justify-center text-slate-400 p-8 origin-center"
               >
                 {listing.category === 'device' && <Laptop className="w-16 h-16" />}
                 {listing.category === 'book' && <BookOpen className="w-16 h-16" />}

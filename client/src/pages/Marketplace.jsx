@@ -23,6 +23,7 @@ import {
   DollarSign,
   CheckCircle2,
 } from 'lucide-react';
+import useScrollZoom from '../hooks/useScrollZoom';
 
 const CATEGORIES = [
   { id: 'all', label: 'All Items', icon: Sparkles },
@@ -75,6 +76,20 @@ const Marketplace = () => {
   const [error, setError] = useState(null);
   const [totalPages, setTotalPages] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
+
+  // GSAP ScrollTrigger Hero Zoom & Parallax Hook
+  const {
+    containerRef: heroContainerRef,
+    visualRef: heroVisualRef,
+    textRef: heroTextRef,
+  } = useScrollZoom({
+    zoomScale: 1.15,
+    textParallaxY: -22,
+    textFade: 0.82,
+    start: 'top top',
+    end: 'bottom top',
+    scrub: 1,
+  });
 
   // 1. Debounce Search Input (350ms)
   useEffect(() => {
@@ -233,9 +248,21 @@ const Marketplace = () => {
     <div className="min-h-screen bg-slate-50/80 flex flex-col font-sans text-slate-800">
       <Navbar />
 
-      {/* Hero / Banner Header */}
-      <section className="bg-white border-b border-slate-200/70 py-6 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+      {/* Hero / Banner Header with GSAP Scrubbed Zoom */}
+      <section
+        ref={heroContainerRef}
+        className="relative bg-white border-b border-slate-200/70 py-6 px-4 sm:px-6 lg:px-8 overflow-hidden"
+      >
+        {/* Subtle decorative background gradient mesh that zooms smoothly on scroll */}
+        <div
+          ref={heroVisualRef}
+          className="absolute inset-0 bg-gradient-to-r from-indigo-50/50 via-purple-50/30 to-sky-50/40 pointer-events-none origin-center"
+        />
+
+        <div
+          ref={heroTextRef}
+          className="max-w-7xl mx-auto flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 relative z-10"
+        >
           <div>
             <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-indigo-50 border border-indigo-100 text-indigo-700 text-[11px] font-semibold mb-2 shadow-2xs">
               <ShieldCheck className="w-3.5 h-3.5 text-indigo-600" />
