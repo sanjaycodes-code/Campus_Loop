@@ -22,6 +22,7 @@ import {
   RotateCcw,
   DollarSign,
   CheckCircle2,
+  Clock,
 } from 'lucide-react';
 import useScrollZoom from '../hooks/useScrollZoom';
 import ListingImage from '../components/ListingImage';
@@ -114,6 +115,21 @@ const Marketplace = () => {
 
     setSearchParams(params, { replace: true });
   }, [debouncedSearch, category, condition, minPrice, maxPrice, isAvailable, sort, page, setSearchParams]);
+
+  // Progressive Cold-Start Timer state
+  const [loadingSeconds, setLoadingSeconds] = useState(0);
+
+  useEffect(() => {
+    let interval;
+    if (loading) {
+      interval = setInterval(() => {
+        setLoadingSeconds((prev) => prev + 1);
+      }, 1000);
+    } else {
+      setLoadingSeconds(0);
+    }
+    return () => clearInterval(interval);
+  }, [loading]);
 
   // 3. Fetch listings from API with all active filters combined (AND logic)
   const fetchListings = useCallback(async () => {
@@ -620,15 +636,49 @@ const Marketplace = () => {
               </div>
             )}
 
-            {/* Results Counter */}
+            {/* Results Counter & Progressive Loading Indicator */}
             <div className="flex items-center justify-between text-xs text-slate-500 px-1">
-              <p>
-                Showing <strong className="text-slate-900 font-bold">{totalCount}</strong> matching item{totalCount === 1 ? '' : 's'}
-              </p>
+              {loading ? (
+                <div className="flex items-center gap-2 text-indigo-600 font-medium">
+                  <span className="relative flex h-2 w-2">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-indigo-600"></span>
+                  </span>
+                  <span>
+                    {loadingSeconds >= 4
+                      ? `Connecting to campus cloud (${loadingSeconds}s)...`
+                      : 'Fetching available campus items...'}
+                  </span>
+                </div>
+              ) : (
+                <p>
+                  Showing <strong className="text-slate-900 font-bold">{totalCount}</strong> matching item{totalCount === 1 ? '' : 's'}
+                </p>
+              )}
               <p className="hidden sm:block text-[11px] text-slate-400 font-medium">
                 NIT Durgapur Student Exchange
               </p>
             </div>
+
+            {/* Cold Start Notice (Appears if Render server is spinning up from idle) */}
+            {loading && loadingSeconds >= 4 && (
+              <div className="p-3.5 bg-amber-50/90 border border-amber-200/80 rounded-2xl flex items-center justify-between gap-3 text-xs text-amber-900 shadow-2xs">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-7 h-7 rounded-xl bg-amber-100 flex items-center justify-center flex-shrink-0 text-amber-700">
+                    <Clock className="w-4 h-4 animate-spin" />
+                  </div>
+                  <div>
+                    <span className="font-bold">Waking up Render backend cloud...</span>
+                    <span className="hidden sm:inline text-amber-750 text-[11px] ml-1.5">
+                      (Render free tier spins down after 15m idle; once awake, queries are instant!)
+                    </span>
+                  </div>
+                </div>
+                <span className="text-[11px] font-mono font-bold bg-white px-2.5 py-1 rounded-lg border border-amber-200 text-amber-800 shrink-0 shadow-2xs">
+                  {loadingSeconds}s
+                </span>
+              </div>
+            )}
 
             {/* Loading Skeleton */}
             {loading && (

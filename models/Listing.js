@@ -120,6 +120,12 @@ listingSchema.index({ title: 'text', description: 'text' });
 // Compound Index: Marketplace filtering by campus, category, and availability
 listingSchema.index({ campus: 1, category: 1, isAvailable: 1, pricePerDay: 1 });
 
+// High-speed sorting & filtering indexes for Explore page
+listingSchema.index({ category: 1, isAvailable: 1, createdAt: -1 });
+listingSchema.index({ isAvailable: 1, pricePerDay: 1, createdAt: -1 });
+listingSchema.index({ status: 1, createdAt: -1 });
+listingSchema.index({ createdAt: -1 });
+
 // Compound Index: Scoped owner queries for dashboard
 listingSchema.index({ owner: 1, createdAt: -1 });
 

@@ -83,6 +83,8 @@ const ListingImage = ({
           <img
             src={primaryImage}
             alt={title}
+            loading="lazy"
+            decoding="async"
             referrerPolicy="no-referrer"
             className={`w-full h-full object-cover transition-transform duration-300 ${
               hoverZoom ? 'group-hover:scale-105' : ''

@@ -123,9 +123,9 @@ app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 // Enable CORS for Express REST endpoints
 app.use(cors(corsOptions));
 
-// Health Check Route
-app.get('/health', (req, res) => {
-  res.status(200).json({ status: 'healthy', timestamp: new Date().toISOString() });
+// Health Check Routes (For external keep-alive cron pings & monitoring)
+app.get(['/health', '/api/health'], (req, res) => {
+  res.status(200).json({ status: 'healthy', uptime: process.uptime(), timestamp: new Date().toISOString() });
 });
 
 // API Routes

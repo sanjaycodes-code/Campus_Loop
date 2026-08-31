@@ -185,12 +185,17 @@ const getListings = async (req, res) => {
       sortOption = { createdAt: 1 };
     }
 
-    const total = await Listing.countDocuments(query);
-    const listings = await Listing.find(query)
-      .populate('owner', 'name email campus phone avatar role isVerified')
-      .sort(sortOption)
-      .skip(skip)
-      .limit(limit);
+    // Execute total count and paginated query concurrently in parallel
+    const [total, listings] = await Promise.all([
+      Listing.countDocuments(query),
+      Listing.find(query)
+        .select('-bookedPeriods')
+        .populate('owner', 'name email campus phone avatar role isVerified')
+        .sort(sortOption)
+        .skip(skip)
+        .limit(limit)
+        .lean(),
+    ]);
 
     const pages = Math.ceil(total / limit) || 1;
 
