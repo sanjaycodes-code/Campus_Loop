@@ -24,6 +24,7 @@ import {
   CheckCircle2,
 } from 'lucide-react';
 import useScrollZoom from '../hooks/useScrollZoom';
+import ListingImage from '../components/ListingImage';
 
 const CATEGORIES = [
   { id: 'all', label: 'All Items', icon: Sparkles },
@@ -700,8 +701,6 @@ const Marketplace = () => {
             {!loading && !error && listings.length > 0 && (
               <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5">
                 {listings.map((item, idx) => {
-                  const primaryImage =
-                    item.images && item.images.length > 0 ? item.images[0] : null;
                   const isRecentlyUpdated = recentlyUpdatedListingId === item._id;
                   const staggerDelay = `${Math.min(idx * 30, 210)}ms`;
 
@@ -712,43 +711,14 @@ const Marketplace = () => {
                       style={{ animationDelay: staggerDelay }}
                       className="group bg-white rounded-2xl border border-slate-200/80 hover:border-indigo-300 hover:shadow-lg hover:shadow-indigo-500/5 card-hover-lift animate-card-reflow flex flex-col justify-between overflow-hidden"
                     >
-                      {/* Card Image / Themed Empty State Placeholder */}
-                      <div className="relative h-44 overflow-hidden flex items-center justify-center bg-slate-100">
-                        {primaryImage ? (
-                          <img
-                            src={primaryImage}
-                            alt={item.title}
-                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                            onError={(e) => {
-                              e.target.style.display = 'none';
-                            }}
-                          />
-                        ) : (
-                          /* Intentional Themed Category Placeholder */
-                          <div
-                            className={`w-full h-full flex flex-col items-center justify-center relative ${
-                              item.category === 'book'
-                                ? 'bg-gradient-to-br from-amber-50 via-orange-50/60 to-amber-100/50'
-                                : item.category === 'device'
-                                ? 'bg-gradient-to-br from-indigo-50 via-sky-50/50 to-indigo-100/40'
-                                : 'bg-gradient-to-br from-violet-50 via-purple-50/50 to-violet-100/40'
-                            }`}
-                          >
-                            <div className="w-14 h-14 rounded-2xl bg-white shadow-xs border border-slate-200/60 flex items-center justify-center text-slate-700 group-hover:scale-105 transition-transform">
-                              {item.category === 'book' && <BookOpen className="w-7 h-7 text-amber-700" />}
-                              {item.category === 'device' && <Laptop className="w-7 h-7 text-indigo-600" />}
-                              {item.category === 'gadget' && <Headphones className="w-7 h-7 text-violet-600" />}
-                            </div>
-                            <span className="mt-2 text-[10px] font-bold uppercase tracking-wider text-slate-400">
-                              {item.category === 'book'
-                                ? 'Academic Text'
-                                : item.category === 'device'
-                                ? 'Hardware Gear'
-                                : 'Campus Gadget'}
-                            </span>
-                          </div>
-                        )}
-
+                      {/* Shared Fixed-Aspect-Ratio Listing Image */}
+                      <ListingImage
+                        images={item.images}
+                        imageUrl={item.imageUrl}
+                        category={item.category}
+                        title={item.title}
+                        aspectRatio="h-44"
+                      >
                         {/* Category Tag Overlay (Subtle, non-competing) */}
                         <div className="absolute top-3 left-3">
                           <span
@@ -779,7 +749,7 @@ const Marketplace = () => {
                             {item.isAvailable ? 'Available' : 'Rented'}
                           </span>
                         </div>
-                      </div>
+                      </ListingImage>
 
                       {/* Card Content Body */}
                       <div className="p-4 flex-1 flex flex-col justify-between">

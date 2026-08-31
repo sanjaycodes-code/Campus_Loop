@@ -40,6 +40,13 @@ const createListing = async (req, res) => {
         .filter((img) => img.length > 0);
     }
 
+    const singleImage = req.body.imageUrl || req.body.image;
+    if (singleImage && typeof singleImage === 'string' && singleImage.trim().length > 0) {
+      if (!formattedImages.includes(singleImage.trim())) {
+        formattedImages.push(singleImage.trim());
+      }
+    }
+
     const listing = await Listing.create({
       title: title.trim(),
       description: description.trim(),
@@ -327,6 +334,11 @@ const updateListing = async (req, res) => {
           .split(',')
           .map((img) => img.trim())
           .filter((img) => img.length > 0);
+      }
+    } else if (req.body.imageUrl || req.body.image) {
+      const singleImage = req.body.imageUrl || req.body.image;
+      if (typeof singleImage === 'string' && singleImage.trim().length > 0) {
+        listing.images = [singleImage.trim()];
       }
     }
 

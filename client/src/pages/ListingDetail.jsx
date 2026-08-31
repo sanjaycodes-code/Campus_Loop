@@ -24,6 +24,7 @@ import {
   RefreshCw,
 } from 'lucide-react';
 import useScrollZoom from '../hooks/useScrollZoom';
+import ListingImage from '../components/ListingImage';
 
 const ListingDetail = () => {
   const { id } = useParams();
@@ -507,43 +508,20 @@ const ListingDetail = () => {
           {/* Left Column: Image Gallery & Description */}
           <div className="lg:col-span-7 space-y-6">
             {/* Main Image Showcase with GSAP Scroll Zoom */}
-            <div
-              ref={imageContainerRef}
-              className="relative bg-slate-100 rounded-2xl border border-slate-200 overflow-hidden aspect-[4/3] flex items-center justify-center shadow-xs"
-            >
-              {images.length > 0 ? (
-                <div ref={imageVisualRef} className="w-full h-full flex items-center justify-center origin-center">
-                  <img
-                    src={images[selectedImage] || images[0]}
-                    alt={listing.title}
-                    referrerPolicy="no-referrer"
-                    className="w-full h-full object-contain"
-                    onError={(e) => {
-                      e.currentTarget.style.display = 'none';
-                      if (e.currentTarget.nextSibling) {
-                        e.currentTarget.nextSibling.style.display = 'flex';
-                      }
-                    }}
-                  />
-                </div>
-              ) : null}
-
-              <div
-                ref={images.length === 0 ? imageVisualRef : undefined}
-                style={{ display: images.length > 0 ? 'none' : 'flex' }}
-                className="flex flex-col items-center justify-center text-slate-400 p-8 origin-center"
+            <div ref={imageContainerRef} className="rounded-2xl overflow-hidden border border-slate-200 shadow-xs">
+              <ListingImage
+                images={images.length > 0 ? [images[selectedImage] || images[0]] : []}
+                category={listing.category}
+                title={listing.title}
+                aspectRatio="aspect-[4/3]"
+                innerRef={imageVisualRef}
               >
-                {listing.category === 'device' && <Laptop className="w-16 h-16" />}
-                {listing.category === 'book' && <BookOpen className="w-16 h-16" />}
-                {listing.category === 'gadget' && <Headphones className="w-16 h-16" />}
-                <p className="text-xs mt-2">No photos uploaded for this item</p>
-              </div>
-
-              <div className="absolute top-4 left-4">
-                <span className="text-xs font-bold uppercase tracking-wider px-3 py-1.5 rounded-lg bg-white/90 backdrop-blur-md text-slate-800 border border-slate-200 shadow-xs">
-                  {listing.category}
-                </span>
-              </div>
+                <div className="absolute top-4 left-4">
+                  <span className="text-xs font-bold uppercase tracking-wider px-3 py-1.5 rounded-lg bg-white/90 backdrop-blur-md text-slate-800 border border-slate-200 shadow-xs">
+                    {listing.category}
+                  </span>
+                </div>
+              </ListingImage>
             </div>
 
             {/* Thumbnail Strip */}
