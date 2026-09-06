@@ -254,20 +254,20 @@ const Marketplace = () => {
   }, [debouncedSearch, category, condition, minPrice, maxPrice, isAvailable, sort]);
 
   const getCategoryBadgeColor = (cat) => {
-    switch (cat) {
+    switch (cat?.toLowerCase()) {
       case 'device':
-        return 'bg-indigo-50/90 text-indigo-700 border-indigo-200/80';
+        return 'bg-[#0F172A]/95 text-[#38BDF8] border-[#0284C7]/60 shadow-[0_2px_10px_rgba(2,132,199,0.2)]';
       case 'book':
-        return 'bg-amber-50/90 text-amber-800 border-amber-200/80';
+        return 'bg-[#261B0E]/95 text-[#FBBF24] border-[#D97706]/60 shadow-[0_2px_10px_rgba(217,119,6,0.2)]';
       case 'gadget':
-        return 'bg-violet-50/90 text-violet-700 border-violet-200/80';
+        return 'bg-[#26103D]/95 text-[#C084FC] border-[#A855F7]/60 shadow-[0_2px_10px_rgba(168,85,247,0.2)]';
       default:
-        return 'bg-slate-50/90 text-slate-700 border-slate-200/80';
+        return 'bg-[#181A26]/95 text-[#C4B5FD] border-[#8B5CF6]/40 shadow-xs';
     }
   };
 
   return (
-    <div className="min-h-screen bg-slate-100/90 flex flex-col font-sans text-slate-800">
+    <div className="min-h-screen bg-[#0D0E15] flex flex-col font-sans text-slate-200 selection:bg-[#8B5CF6]/30 selection:text-white">
       <Navbar />
 
       {/* ========================================================================= */}
@@ -298,52 +298,19 @@ const Marketplace = () => {
           {/* Top Row: Title, Subtitle, & Primary Pill CTA */}
           <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6">
             <div className="max-w-2xl space-y-3.5">
-              {/* Badge & Font Comparison Switcher */}
+              {/* Verified Pill Badge */}
               <div className="flex items-center gap-3 flex-wrap">
-                {/* Verified Pill Badge */}
                 <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#181A26] border border-[#2D3147] text-[#C4B5FD] text-xs font-semibold shadow-inner">
                   <span className="w-1.5 h-1.5 rounded-full bg-[#A78BFA] animate-pulse" />
                   <ShieldCheck className="w-3.5 h-3.5 text-[#A78BFA]" />
                   <span>NIT Durgapur Verified Peer Network</span>
                 </div>
-
-                {/* Interactive Font Preview Switcher */}
-                <div className="inline-flex items-center p-0.5 bg-[#141622] border border-[#26293D] rounded-full text-[10px] font-semibold">
-                  <button
-                    type="button"
-                    onClick={() => setHeadlineFont('clash')}
-                    className={`px-2.5 py-0.5 rounded-full transition-all cursor-pointer ${
-                      headlineFont === 'clash'
-                        ? 'bg-[#8B5CF6] text-white shadow-xs'
-                        : 'text-slate-400 hover:text-white'
-                    }`}
-                  >
-                    Clash Display
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setHeadlineFont('space')}
-                    className={`px-2.5 py-0.5 rounded-full transition-all cursor-pointer ${
-                      headlineFont === 'space'
-                        ? 'bg-[#8B5CF6] text-white shadow-xs'
-                        : 'text-slate-400 hover:text-white'
-                    }`}
-                  >
-                    Space Grotesk
-                  </button>
-                </div>
               </div>
 
-              {/* Dynamic Headline: Clash Display (Modern Geometric Neo-Grotesque) vs Space Grotesk (Tech Brutalist) */}
-              {headlineFont === 'clash' ? (
-                <h1 className="font-clash text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-white leading-[1.12]">
-                  Campus Rental <span className="text-[#A78BFA]">Marketplace</span>
-                </h1>
-              ) : (
-                <h1 className="font-space text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-white leading-[1.12]">
-                  Campus Rental <span className="text-[#A78BFA]">Marketplace</span>
-                </h1>
-              )}
+              {/* Locked-in Headline: Clash Display (Approved Modern Geometric Marketplace Display Font) */}
+              <h1 className="font-clash text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-white leading-[1.12]">
+                Campus Rental <span className="text-[#A78BFA]">Marketplace</span>
+              </h1>
 
               {/* Supporting Sans-Serif Subtext */}
               <p className="text-sm sm:text-base text-slate-400 font-sans font-normal leading-relaxed max-w-xl">
@@ -397,18 +364,18 @@ const Marketplace = () => {
       </section>
 
       {/* Main Container with Full-Height Sidebar Panel + Grid Area */}
-      <div className="max-w-7xl mx-auto w-full flex-1 flex flex-col lg:flex-row border-x border-slate-200/80 bg-white min-h-[calc(100vh-260px)]">
+      <div className="max-w-7xl mx-auto w-full flex-1 flex flex-col lg:flex-row border-x border-[#1F2233] bg-[#0D0E15] min-h-[calc(100vh-260px)]">
         {/* ================= LEFT FULL-HEIGHT SIDEBAR PANEL (Desktop) ================= */}
-        <aside className="hidden lg:flex lg:w-72 lg:flex-col shrink-0 bg-slate-50/90 border-r border-slate-200/90 p-6 space-y-6">
-          <div className="flex items-center justify-between pb-3.5 border-b border-slate-200/80">
-            <div className="flex items-center gap-2 text-slate-900 font-bold text-xs uppercase tracking-wider">
-              <SlidersHorizontal className="w-3.5 h-3.5 text-indigo-600" />
+        <aside className="hidden lg:flex lg:w-72 lg:flex-col shrink-0 bg-[#0D0E15] border-r border-[#1F2233] p-6 space-y-6">
+          <div className="flex items-center justify-between pb-3.5 border-b border-[#1F2233]">
+            <div className="flex items-center gap-2 text-white font-bold text-xs uppercase tracking-wider">
+              <SlidersHorizontal className="w-3.5 h-3.5 text-[#A78BFA]" />
               <span>Filters & Browse</span>
             </div>
             {hasActiveFilters && (
               <button
                 onClick={clearFilters}
-                className="text-[11px] font-semibold text-rose-600 hover:text-rose-700 flex items-center gap-1 cursor-pointer transition-colors btn-press-snap"
+                className="text-[11px] font-semibold text-[#FB7185] hover:text-rose-400 flex items-center gap-1 cursor-pointer transition-colors btn-press-snap"
               >
                 <RotateCcw className="w-3 h-3" />
                 <span>Reset</span>
@@ -431,8 +398,8 @@ const Marketplace = () => {
                     onClick={() => handleCategoryChange(cat.id)}
                     className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all duration-150 btn-press-snap cursor-pointer ${
                       isSelected
-                        ? 'bg-indigo-600 text-white shadow-sm shadow-indigo-600/20'
-                        : 'text-slate-700 hover:bg-white hover:text-slate-900'
+                        ? 'bg-[#8B5CF6] text-white shadow-[0_0_16px_rgba(139,92,246,0.35)]'
+                        : 'text-slate-300 hover:bg-[#141622] hover:text-white'
                     }`}
                   >
                     <div className="flex items-center gap-2.5">
@@ -454,7 +421,7 @@ const Marketplace = () => {
             <div className="grid grid-cols-2 gap-2">
               <div>
                 <div className="relative">
-                  <span className="absolute inset-y-0 left-0 pl-2.5 flex items-center pointer-events-none text-slate-400 text-xs font-semibold">₹</span>
+                  <span className="absolute inset-y-0 left-0 pl-2.5 flex items-center pointer-events-none text-slate-500 text-xs font-semibold">₹</span>
                   <input
                     type="number"
                     min="0"
@@ -464,13 +431,13 @@ const Marketplace = () => {
                       setPage(1);
                     }}
                     placeholder="Min"
-                    className="w-full pl-6 pr-2.5 py-1.5 h-9 bg-white border border-slate-200 rounded-xl text-xs font-medium text-slate-900 placeholder:text-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all duration-150 shadow-2xs"
+                    className="w-full pl-6 pr-2.5 py-1.5 h-9 bg-[#141622] border border-[#26293D] rounded-xl text-xs font-medium text-white placeholder:text-slate-500 focus:bg-[#181A28] focus:outline-none focus:ring-2 focus:ring-[#8B5CF6]/40 focus:border-[#8B5CF6] transition-all duration-150 shadow-2xs"
                   />
                 </div>
               </div>
               <div>
                 <div className="relative">
-                  <span className="absolute inset-y-0 left-0 pl-2.5 flex items-center pointer-events-none text-slate-400 text-xs font-semibold">₹</span>
+                  <span className="absolute inset-y-0 left-0 pl-2.5 flex items-center pointer-events-none text-slate-500 text-xs font-semibold">₹</span>
                   <input
                     type="number"
                     min="0"
@@ -480,13 +447,13 @@ const Marketplace = () => {
                       setPage(1);
                     }}
                     placeholder="Max"
-                    className="w-full pl-6 pr-2.5 py-1.5 h-9 bg-white border border-slate-200 rounded-xl text-xs font-medium text-slate-900 placeholder:text-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all duration-150 shadow-2xs"
+                    className="w-full pl-6 pr-2.5 py-1.5 h-9 bg-[#141622] border border-[#26293D] rounded-xl text-xs font-medium text-white placeholder:text-slate-500 focus:bg-[#181A28] focus:outline-none focus:ring-2 focus:ring-[#8B5CF6]/40 focus:border-[#8B5CF6] transition-all duration-150 shadow-2xs"
                   />
                 </div>
               </div>
             </div>
             {minPrice !== '' && maxPrice !== '' && Number(minPrice) > Number(maxPrice) && (
-              <p className="text-[10px] text-amber-600 mt-1.5 font-medium">
+              <p className="text-[10px] text-amber-400 mt-1.5 font-medium">
                 Min rate exceeds Max rate.
               </p>
             )}
@@ -497,7 +464,7 @@ const Marketplace = () => {
             <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-2.5">
               Availability
             </label>
-            <div className="bg-slate-200/70 p-1 rounded-xl grid grid-cols-3 gap-1">
+            <div className="bg-[#141622] border border-[#26293D] p-1 rounded-xl grid grid-cols-3 gap-1">
               {[
                 { id: 'all', label: 'All' },
                 { id: 'true', label: 'In Stock' },
@@ -510,8 +477,8 @@ const Marketplace = () => {
                     onClick={() => handleAvailabilityChange(item.id)}
                     className={`py-1.5 px-2 rounded-lg text-xs transition-all duration-150 text-center cursor-pointer btn-press-snap ${
                       isSelected
-                        ? 'bg-white text-slate-900 font-bold shadow-2xs'
-                        : 'text-slate-600 hover:text-slate-900 font-medium'
+                        ? 'bg-[#8B5CF6] text-white font-bold shadow-xs'
+                        : 'text-slate-400 hover:text-white font-medium'
                     }`}
                   >
                     {item.label}
@@ -529,10 +496,10 @@ const Marketplace = () => {
             <select
               value={condition}
               onChange={(e) => handleConditionChange(e.target.value)}
-              className="w-full h-9 px-3 bg-white border border-slate-200 rounded-xl text-xs text-slate-800 font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all duration-150 cursor-pointer shadow-2xs"
+              className="w-full h-9 px-3 bg-[#141622] border border-[#26293D] rounded-xl text-xs text-white font-medium focus:bg-[#181A28] focus:outline-none focus:ring-2 focus:ring-[#8B5CF6]/40 focus:border-[#8B5CF6] transition-all duration-150 cursor-pointer shadow-2xs"
             >
               {CONDITIONS.map((cond) => (
-                <option key={cond.id} value={cond.id}>
+                <option key={cond.id} value={cond.id} className="bg-[#141622] text-white">
                   {cond.label}
                 </option>
               ))}
@@ -541,12 +508,12 @@ const Marketplace = () => {
         </aside>
 
         {/* ================= RIGHT RESULTS AREA ================= */}
-        <main id="marketplace-grid" className="flex-1 bg-slate-100/70 p-4 sm:p-6 lg:p-8 space-y-6">
+        <main id="marketplace-grid" className="flex-1 bg-[#0D0E15] p-4 sm:p-6 lg:p-8 space-y-6">
             {/* Top Search Bar & Sort Row */}
-            <div className="bg-white p-3 sm:p-4 rounded-2xl border border-slate-200/80 shadow-xs flex flex-col sm:flex-row gap-3 items-stretch sm:items-center justify-between">
+            <div className="bg-[#141622] p-3 sm:p-4 rounded-2xl border border-[#26293D] shadow-sm flex flex-col sm:flex-row gap-3 items-stretch sm:items-center justify-between">
               {/* Search Box */}
               <div className="relative flex-1">
-                <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+                <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-500">
                   <Search className="w-4 h-4" />
                 </div>
                 <input
@@ -557,7 +524,7 @@ const Marketplace = () => {
                     setPage(1);
                   }}
                   placeholder="Search calculators, books, lab coats, components..."
-                  className="w-full pl-10 pr-9 py-2.5 bg-slate-50/80 border border-slate-200 rounded-xl text-slate-900 text-xs sm:text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all"
+                  className="w-full pl-10 pr-9 py-2.5 bg-[#0D0E15] border border-[#26293D] rounded-xl text-white placeholder:text-slate-500 text-xs sm:text-sm font-medium focus:outline-none focus:ring-2 focus:ring-[#8B5CF6]/40 focus:border-[#8B5CF6] transition-all"
                 />
                 {search && (
                   <button
@@ -566,7 +533,7 @@ const Marketplace = () => {
                       setDebouncedSearch('');
                       setPage(1);
                     }}
-                    className="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-slate-600 cursor-pointer"
+                    className="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-white cursor-pointer"
                   >
                     <X className="w-4 h-4" />
                   </button>
@@ -577,33 +544,33 @@ const Marketplace = () => {
               <div className="flex items-center gap-2">
                 <button
                   onClick={() => setShowMobileFilters(!showMobileFilters)}
-                  className="lg:hidden px-3.5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-semibold inline-flex items-center gap-1.5 cursor-pointer transition-colors"
+                  className="lg:hidden px-3.5 py-2.5 bg-[#0D0E15] hover:bg-[#181A28] text-slate-300 border border-[#26293D] rounded-xl text-xs font-semibold inline-flex items-center gap-1.5 cursor-pointer transition-colors"
                 >
-                  <Filter className="w-3.5 h-3.5 text-indigo-600" />
+                  <Filter className="w-3.5 h-3.5 text-[#A78BFA]" />
                   <span>Filters</span>
                 </button>
 
                 <select
                   value={sort}
                   onChange={(e) => handleSortChange(e.target.value)}
-                  className="py-2.5 px-3 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-800 font-semibold focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 cursor-pointer transition-all"
+                  className="py-2.5 px-3 bg-[#0D0E15] border border-[#26293D] rounded-xl text-xs text-white font-semibold focus:outline-none focus:ring-2 focus:ring-[#8B5CF6]/40 focus:border-[#8B5CF6] cursor-pointer transition-all"
                 >
-                  <option value="createdAt:desc">Newest First</option>
-                  <option value="price_asc">Price: Low to High</option>
-                  <option value="price_desc">Price: High to Low</option>
-                  <option value="oldest">Oldest First</option>
+                  <option value="createdAt:desc" className="bg-[#0D0E15] text-white">Newest First</option>
+                  <option value="price_asc" className="bg-[#0D0E15] text-white">Price: Low to High</option>
+                  <option value="price_desc" className="bg-[#0D0E15] text-white">Price: High to Low</option>
+                  <option value="oldest" className="bg-[#0D0E15] text-white">Oldest First</option>
                 </select>
               </div>
             </div>
 
             {/* Mobile Filter Drawer */}
             {showMobileFilters && (
-              <div className="lg:hidden bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-4 animate-in fade-in duration-150">
-                <div className="flex items-center justify-between pb-2 border-b border-slate-100">
-                  <span className="font-bold text-sm text-slate-900">Filters</span>
+              <div className="lg:hidden bg-[#141622] p-5 rounded-2xl border border-[#26293D] shadow-lg space-y-4 animate-in fade-in duration-150">
+                <div className="flex items-center justify-between pb-2 border-b border-[#26293D]">
+                  <span className="font-bold text-sm text-white">Filters</span>
                   <button
                     onClick={() => setShowMobileFilters(false)}
-                    className="text-xs font-semibold text-indigo-600"
+                    className="text-xs font-semibold text-[#A78BFA] hover:text-white"
                   >
                     Done
                   </button>
@@ -615,10 +582,10 @@ const Marketplace = () => {
                     <button
                       key={cat.id}
                       onClick={() => handleCategoryChange(cat.id)}
-                      className={`px-3 py-1.5 rounded-lg text-xs font-medium ${
+                      className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
                         category === cat.id
-                          ? 'bg-indigo-600 text-white font-semibold'
-                          : 'bg-slate-100 text-slate-700'
+                          ? 'bg-[#8B5CF6] text-white font-semibold shadow-xs'
+                          : 'bg-[#0D0E15] border border-[#26293D] text-slate-300'
                       }`}
                     >
                       {cat.label}
@@ -633,14 +600,14 @@ const Marketplace = () => {
                     value={minPrice}
                     onChange={(e) => setMinPrice(e.target.value)}
                     placeholder="Min Price ₹"
-                    className="px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-xs font-medium"
+                    className="px-3 py-2 bg-[#0D0E15] border border-[#26293D] rounded-lg text-xs font-medium text-white placeholder:text-slate-500"
                   />
                   <input
                     type="number"
                     value={maxPrice}
                     onChange={(e) => setMaxPrice(e.target.value)}
                     placeholder="Max Price ₹"
-                    className="px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-xs font-medium"
+                    className="px-3 py-2 bg-[#0D0E15] border border-[#26293D] rounded-lg text-xs font-medium text-white placeholder:text-slate-500"
                   />
                 </div>
 
@@ -648,7 +615,7 @@ const Marketplace = () => {
                 {hasActiveFilters && (
                   <button
                     onClick={clearFilters}
-                    className="w-full py-2 bg-rose-50 text-rose-600 rounded-xl text-xs font-semibold"
+                    className="w-full py-2 bg-[#24141E] text-[#FB7185] border border-[#441D29] rounded-xl text-xs font-semibold"
                   >
                     Clear All Filters
                   </button>
@@ -659,13 +626,13 @@ const Marketplace = () => {
             {/* Active Filter Chips Bar */}
             {hasActiveFilters && (
               <div className="flex items-center gap-2 flex-wrap text-xs">
-                <span className="text-slate-400 font-semibold text-[11px] uppercase tracking-wider">Applied:</span>
+                <span className="text-slate-500 font-semibold text-[11px] uppercase tracking-wider">Applied:</span>
 
                 {debouncedSearch && (
-                  <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-indigo-50 text-indigo-700 border border-indigo-200/80 font-medium">
+                  <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#181A26] text-[#C4B5FD] border border-[#2D3147] font-medium shadow-inner">
                     Search: "{debouncedSearch}"
                     <X
-                      className="w-3 h-3 cursor-pointer hover:text-indigo-900"
+                      className="w-3 h-3 cursor-pointer hover:text-white"
                       onClick={() => {
                         setSearch('');
                         setDebouncedSearch('');
@@ -676,30 +643,30 @@ const Marketplace = () => {
                 )}
 
                 {category !== 'all' && (
-                  <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-indigo-50 text-indigo-700 border border-indigo-200/80 font-medium">
+                  <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#181A26] text-[#C4B5FD] border border-[#2D3147] font-medium shadow-inner">
                     Category: {CATEGORIES.find((c) => c.id === category)?.label}
                     <X
-                      className="w-3 h-3 cursor-pointer hover:text-indigo-900"
+                      className="w-3 h-3 cursor-pointer hover:text-white"
                       onClick={() => handleCategoryChange('all')}
                     />
                   </span>
                 )}
 
                 {condition !== 'all' && (
-                  <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-indigo-50 text-indigo-700 border border-indigo-200/80 font-medium">
+                  <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#181A26] text-[#C4B5FD] border border-[#2D3147] font-medium shadow-inner">
                     Condition: {CONDITIONS.find((c) => c.id === condition)?.label}
                     <X
-                      className="w-3 h-3 cursor-pointer hover:text-indigo-900"
+                      className="w-3 h-3 cursor-pointer hover:text-white"
                       onClick={() => handleConditionChange('all')}
                     />
                   </span>
                 )}
 
                 {(minPrice !== '' || maxPrice !== '') && (
-                  <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-indigo-50 text-indigo-700 border border-indigo-200/80 font-medium">
+                  <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#181A26] text-[#C4B5FD] border border-[#2D3147] font-medium shadow-inner">
                     Price: ₹{minPrice || 0} – ₹{maxPrice || '∞'}
                     <X
-                      className="w-3 h-3 cursor-pointer hover:text-indigo-900"
+                      className="w-3 h-3 cursor-pointer hover:text-white"
                       onClick={() => {
                         setMinPrice('');
                         setMaxPrice('');
@@ -710,10 +677,10 @@ const Marketplace = () => {
                 )}
 
                 {isAvailable !== 'all' && (
-                  <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-indigo-50 text-indigo-700 border border-indigo-200/80 font-medium">
+                  <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#181A26] text-[#C4B5FD] border border-[#2D3147] font-medium shadow-inner">
                     {isAvailable === 'true' ? 'In Stock Only' : 'Rented Only'}
                     <X
-                      className="w-3 h-3 cursor-pointer hover:text-indigo-900"
+                      className="w-3 h-3 cursor-pointer hover:text-white"
                       onClick={() => handleAvailabilityChange('all')}
                     />
                   </span>
@@ -721,7 +688,7 @@ const Marketplace = () => {
 
                 <button
                   onClick={clearFilters}
-                  className="text-xs font-semibold text-rose-600 hover:text-rose-700 ml-1 cursor-pointer"
+                  className="text-xs font-semibold text-[#FB7185] hover:text-rose-400 ml-1 cursor-pointer"
                 >
                   Clear All
                 </button>
@@ -729,12 +696,12 @@ const Marketplace = () => {
             )}
 
             {/* Results Counter & Progressive Loading Indicator */}
-            <div className="flex items-center justify-between text-xs text-slate-500 px-1">
+            <div className="flex items-center justify-between text-xs text-slate-400 px-1">
               {loading ? (
-                <div className="flex items-center gap-2 text-indigo-600 font-medium">
+                <div className="flex items-center gap-2 text-[#A78BFA] font-medium">
                   <span className="relative flex h-2 w-2">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-2 w-2 bg-indigo-600"></span>
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#8B5CF6]/60 opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-[#8B5CF6]"></span>
                   </span>
                   <span>
                     {loadingSeconds >= 4
@@ -744,29 +711,29 @@ const Marketplace = () => {
                 </div>
               ) : (
                 <p>
-                  Showing <strong className="text-slate-900 font-bold">{totalCount}</strong> matching item{totalCount === 1 ? '' : 's'}
+                  Showing <strong className="text-white font-bold">{totalCount}</strong> matching item{totalCount === 1 ? '' : 's'}
                 </p>
               )}
-              <p className="hidden sm:block text-[11px] text-slate-400 font-medium">
+              <p className="hidden sm:block text-[11px] text-slate-500 font-medium">
                 NIT Durgapur Student Exchange
               </p>
             </div>
 
             {/* Cold Start Notice (Appears if Render server is spinning up from idle) */}
             {loading && loadingSeconds >= 4 && (
-              <div className="p-3.5 bg-amber-50/90 border border-amber-200/80 rounded-2xl flex items-center justify-between gap-3 text-xs text-amber-900 shadow-2xs">
+              <div className="p-3.5 bg-[#1A1612] border border-[#3D3222] rounded-2xl flex items-center justify-between gap-3 text-xs text-amber-200 shadow-2xs">
                 <div className="flex items-center gap-2.5">
-                  <div className="w-7 h-7 rounded-xl bg-amber-100 flex items-center justify-center flex-shrink-0 text-amber-700">
+                  <div className="w-7 h-7 rounded-xl bg-[#2D2418] flex items-center justify-center flex-shrink-0 text-amber-400">
                     <Clock className="w-4 h-4 animate-spin" />
                   </div>
                   <div>
-                    <span className="font-bold">Waking up Render backend cloud...</span>
-                    <span className="hidden sm:inline text-amber-750 text-[11px] ml-1.5">
+                    <span className="font-bold text-amber-300">Waking up Render backend cloud...</span>
+                    <span className="hidden sm:inline text-amber-400/80 text-[11px] ml-1.5">
                       (Render free tier spins down after 15m idle; once awake, queries are instant!)
                     </span>
                   </div>
                 </div>
-                <span className="text-[11px] font-mono font-bold bg-white px-2.5 py-1 rounded-lg border border-amber-200 text-amber-800 shrink-0 shadow-2xs">
+                <span className="text-[11px] font-mono font-bold bg-[#141622] px-2.5 py-1 rounded-lg border border-[#3D3222] text-amber-300 shrink-0 shadow-2xs">
                   {loadingSeconds}s
                 </span>
               </div>
@@ -778,13 +745,13 @@ const Marketplace = () => {
                 {[1, 2, 3, 4, 5, 6].map((i) => (
                   <div
                     key={i}
-                    className="bg-white rounded-2xl border border-slate-200/80 overflow-hidden shadow-xs animate-pulse"
+                    className="bg-[#141622] rounded-2xl border border-[#26293D] overflow-hidden shadow-xs animate-pulse"
                   >
-                    <div className="h-44 bg-slate-200/70"></div>
+                    <div className="h-44 bg-[#1A1D2B]"></div>
                     <div className="p-4 space-y-3">
-                      <div className="h-4 bg-slate-200/70 rounded w-1/3"></div>
-                      <div className="h-5 bg-slate-200/70 rounded w-3/4"></div>
-                      <div className="h-4 bg-slate-200/70 rounded w-1/2"></div>
+                      <div className="h-4 bg-[#1A1D2B] rounded w-1/3"></div>
+                      <div className="h-5 bg-[#1A1D2B] rounded w-3/4"></div>
+                      <div className="h-4 bg-[#1A1D2B] rounded w-1/2"></div>
                     </div>
                   </div>
                 ))}
@@ -793,11 +760,11 @@ const Marketplace = () => {
 
             {/* Error View */}
             {error && (
-              <div className="p-6 rounded-2xl bg-rose-50 border border-rose-200 text-rose-700 text-center">
+              <div className="p-6 rounded-2xl bg-[#1A1318] border border-[#3E1D27] text-rose-300 text-center">
                 <p className="font-semibold text-sm">{error}</p>
                 <button
                   onClick={fetchListings}
-                  className="mt-3 px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white text-xs font-semibold rounded-xl transition-colors cursor-pointer"
+                  className="mt-3 px-4 py-2 bg-[#8B5CF6] hover:bg-[#7C3AED] text-white text-xs font-semibold rounded-xl transition-colors cursor-pointer shadow-xs"
                 >
                   Retry
                 </button>
@@ -806,12 +773,12 @@ const Marketplace = () => {
 
             {/* Empty State */}
             {!loading && !error && listings.length === 0 && (
-              <div className="bg-white rounded-2xl border border-slate-200/80 p-12 text-center shadow-xs max-w-md mx-auto my-6">
-                <div className="w-14 h-14 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center mx-auto mb-3 border border-indigo-100">
+              <div className="bg-[#141622] rounded-2xl border border-[#26293D] p-12 text-center shadow-md max-w-md mx-auto my-6">
+                <div className="w-14 h-14 rounded-2xl bg-[#181A26] text-[#A78BFA] flex items-center justify-center mx-auto mb-3 border border-[#2D3147] shadow-inner">
                   <ShoppingBag className="w-7 h-7" />
                 </div>
-                <h3 className="text-base font-bold text-slate-900">No matching items found</h3>
-                <p className="mt-1 text-xs text-slate-500 leading-relaxed">
+                <h3 className="text-base font-bold text-white">No matching items found</h3>
+                <p className="mt-1 text-xs text-slate-400 leading-relaxed">
                   {hasActiveFilters
                     ? 'No items matched all your active search and price criteria. Try relaxing your filters or searching a different term.'
                     : 'There are currently no items listed for rent. Be the first on campus to post!'}
@@ -820,14 +787,14 @@ const Marketplace = () => {
                   {hasActiveFilters ? (
                     <button
                       onClick={clearFilters}
-                      className="px-4 py-2 rounded-xl border border-slate-200 text-xs font-semibold text-slate-700 hover:bg-slate-50 cursor-pointer transition-colors"
+                      className="px-4 py-2 rounded-xl border border-[#26293D] text-xs font-semibold text-slate-300 hover:bg-[#181A28] hover:text-white cursor-pointer transition-colors"
                     >
                       Clear Filters
                     </button>
                   ) : (
                     <Link
                       to="/listings/new"
-                      className="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold shadow-xs transition-colors"
+                      className="px-4 py-2 rounded-xl bg-[#8B5CF6] hover:bg-[#7C3AED] text-white text-xs font-semibold shadow-[0_0_20px_rgba(139,92,246,0.35)] transition-colors"
                     >
                       Post an Item
                     </Link>
@@ -848,7 +815,7 @@ const Marketplace = () => {
                       key={item._id}
                       to={`/listings/${item._id}`}
                       style={{ animationDelay: staggerDelay }}
-                      className="group bg-white rounded-2xl border border-slate-200/80 hover:border-indigo-300 hover:shadow-lg hover:shadow-indigo-500/5 card-hover-lift animate-card-reflow flex flex-col justify-between overflow-hidden"
+                      className="group bg-[#141622] rounded-2xl border border-[#26293D] hover:border-[#8B5CF6]/50 hover:shadow-[0_0_24px_rgba(139,92,246,0.18)] card-hover-lift animate-card-reflow flex flex-col justify-between overflow-hidden transition-all duration-200"
                     >
                       {/* Shared Fixed-Aspect-Ratio Listing Image */}
                       <ListingImage
@@ -858,10 +825,10 @@ const Marketplace = () => {
                         title={item.title}
                         aspectRatio="h-44"
                       >
-                        {/* Category Tag Overlay (Subtle, non-competing) */}
+                        {/* Category Tag Overlay (Subtle pill badge consistent with hero verified pill) */}
                         <div className="absolute top-3 left-3">
                           <span
-                            className={`text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-md border backdrop-blur-md shadow-2xs ${getCategoryBadgeColor(
+                            className={`inline-flex items-center text-[10px] font-semibold uppercase tracking-wider px-2.5 py-0.5 rounded-full border backdrop-blur-md shadow-inner ${getCategoryBadgeColor(
                               item.category
                             )}`}
                           >
@@ -869,20 +836,20 @@ const Marketplace = () => {
                           </span>
                         </div>
 
-                        {/* Availability Status Pill (Primary Status Indicator with Live Pulse) */}
+                        {/* Availability Status Pill (Purple accent for Available status) */}
                         <div className="absolute top-3 right-3">
                           <span
-                            className={`inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full border backdrop-blur-md shadow-xs pill-status-transition ${
-                              isRecentlyUpdated ? 'animate-status-update ring-2 ring-emerald-400 ring-offset-1' : ''
+                            className={`inline-flex items-center gap-1.5 text-[10px] font-bold px-2.5 py-0.5 rounded-full border backdrop-blur-md shadow-xs pill-status-transition ${
+                              isRecentlyUpdated ? 'animate-status-update ring-2 ring-[#8B5CF6] ring-offset-1 ring-offset-[#0D0E15]' : ''
                             } ${
                               item.isAvailable
-                                ? 'bg-white/95 text-emerald-700 border-emerald-200/90'
-                                : 'bg-slate-900/90 text-slate-200 border-slate-800'
+                                ? 'bg-[#181A26]/95 text-[#C4B5FD] border-[#8B5CF6]/40'
+                                : 'bg-[#0D0E15]/90 text-slate-400 border-[#26293D]'
                             }`}
                           >
                             <span
                               className={`w-1.5 h-1.5 rounded-full transition-colors duration-200 ${
-                                item.isAvailable ? 'bg-emerald-500 animate-pulse' : 'bg-slate-400'
+                                item.isAvailable ? 'bg-[#8B5CF6] animate-pulse' : 'bg-slate-500'
                               }`}
                             />
                             {item.isAvailable ? 'Available' : 'Rented'}
@@ -895,44 +862,44 @@ const Marketplace = () => {
                         <div>
                           {/* Condition & Campus Tag */}
                           <div className="flex items-center justify-between text-xs text-slate-400 mb-1.5">
-                            <span className="capitalize font-semibold text-slate-500 text-[11px]">
+                            <span className="capitalize font-semibold text-slate-400 text-[11px]">
                               {item.condition?.replace('_', ' ')}
                             </span>
                             <span className="inline-flex items-center gap-1 text-[11px] font-medium text-slate-400 truncate max-w-[120px]">
-                              <MapPin className="w-3 h-3 text-slate-400 flex-shrink-0" />
+                              <MapPin className="w-3 h-3 text-slate-500 flex-shrink-0" />
                               {item.location || item.campus || 'NIT Durgapur'}
                             </span>
                           </div>
 
                           {/* Item Title */}
-                          <h3 className="font-bold text-slate-900 text-sm group-hover:text-indigo-600 transition-colors line-clamp-1">
+                          <h3 className="font-bold text-white text-sm group-hover:text-[#C4B5FD] transition-colors line-clamp-1">
                             {item.title}
                           </h3>
 
                           {/* Item Description */}
-                          <p className="mt-1 text-xs text-slate-500 line-clamp-2 leading-relaxed font-normal">
+                          <p className="mt-1 text-xs text-slate-400 line-clamp-2 leading-relaxed font-normal">
                             {item.description}
                           </p>
                         </div>
 
-                        {/* Card Bottom Row: Bold Price & Lister Info */}
-                        <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between">
+                        {/* Card Bottom Row: Bold Price (Purple Accent) & Lister Info */}
+                        <div className="mt-4 pt-3 border-t border-[#1F2233] flex items-center justify-between">
                           <div className="flex items-baseline">
-                            <span className="text-base sm:text-lg font-black text-slate-900 tracking-tight">
+                            <span className="text-base sm:text-lg font-black text-[#A78BFA] tracking-tight">
                               ₹{item.pricePerDay}
                             </span>
-                            <span className="text-[11px] text-slate-400 font-medium ml-1">/ day</span>
+                            <span className="text-[11px] text-slate-500 font-medium ml-1">/ day</span>
                           </div>
 
                           {/* Lister Verified Student Pill */}
                           <div className="flex items-center gap-1.5">
-                            <div className="w-5 h-5 rounded-full bg-indigo-50 border border-indigo-100 text-indigo-700 text-[10px] font-extrabold flex items-center justify-center">
+                            <div className="w-5 h-5 rounded-full bg-[#181A26] border border-[#2D3147] text-[#C4B5FD] text-[10px] font-extrabold flex items-center justify-center">
                               {(item.owner?.name || 'S')[0].toUpperCase()}
                             </div>
-                            <span className="text-xs font-semibold text-slate-600 truncate max-w-[80px]">
+                            <span className="text-xs font-semibold text-slate-300 truncate max-w-[80px]">
                               {item.owner?.name?.split(' ')[0] || 'Student'}
                             </span>
-                            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 flex-shrink-0" />
+                            <CheckCircle2 className="w-3.5 h-3.5 text-[#A78BFA] flex-shrink-0" />
                           </div>
                         </div>
                       </div>
@@ -948,20 +915,20 @@ const Marketplace = () => {
                 <button
                   onClick={() => setPage((p) => Math.max(1, p - 1))}
                   disabled={page === 1}
-                  className="px-3.5 py-2 rounded-xl border border-slate-200/80 bg-white text-xs font-semibold text-slate-700 hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer flex items-center gap-1 shadow-2xs transition-colors"
+                  className="px-3.5 py-2 rounded-xl border border-[#26293D] bg-[#141622] text-xs font-semibold text-slate-300 hover:bg-[#181A28] hover:text-white disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer flex items-center gap-1 shadow-2xs transition-colors"
                 >
                   <ChevronLeft className="w-4 h-4" />
                   <span>Previous</span>
                 </button>
 
-                <span className="text-xs font-bold text-slate-600 px-3">
+                <span className="text-xs font-bold text-slate-400 px-3">
                   Page {page} of {totalPages}
                 </span>
 
                 <button
                   onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
                   disabled={page === totalPages}
-                  className="px-3.5 py-2 rounded-xl border border-slate-200/80 bg-white text-xs font-semibold text-slate-700 hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer flex items-center gap-1 shadow-2xs transition-colors"
+                  className="px-3.5 py-2 rounded-xl border border-[#26293D] bg-[#141622] text-xs font-semibold text-slate-300 hover:bg-[#181A28] hover:text-white disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer flex items-center gap-1 shadow-2xs transition-colors"
                 >
                   <span>Next</span>
                   <ChevronRight className="w-4 h-4" />

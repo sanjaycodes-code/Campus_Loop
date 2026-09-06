@@ -40,7 +40,7 @@ const ListingImage = ({
 
   const normalizedCategory = (category || 'device').toLowerCase();
 
-  // Category thematic styles
+  // Category thematic styles (Established category-tinted treatment)
   const getCategoryConfig = (cat) => {
     switch (cat) {
       case 'book':
@@ -105,7 +105,7 @@ const ListingImage = ({
           >
             <PlaceholderIcon className={`w-7 h-7 ${config.textColor}`} />
           </div>
-          <span className="mt-2 text-[10px] font-bold uppercase tracking-wider text-slate-400">
+          <span className="mt-2 text-[10px] font-bold uppercase tracking-wider text-slate-500">
             {config.badgeText}
           </span>
         </div>

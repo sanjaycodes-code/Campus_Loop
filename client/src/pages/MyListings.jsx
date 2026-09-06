@@ -41,36 +41,36 @@ const MyListings = () => {
   }, [fetchMyListings]);
 
   const getCategoryBadgeColor = (cat) => {
-    switch (cat) {
+    switch (cat?.toLowerCase()) {
       case 'device':
-        return 'bg-indigo-50/90 text-indigo-700 border-indigo-200/80';
+        return 'bg-[#0F172A]/95 text-[#38BDF8] border-[#0284C7]/60 shadow-[0_2px_10px_rgba(2,132,199,0.2)]';
       case 'book':
-        return 'bg-amber-50/90 text-amber-800 border-amber-200/80';
+        return 'bg-[#261B0E]/95 text-[#FBBF24] border-[#D97706]/60 shadow-[0_2px_10px_rgba(217,119,6,0.2)]';
       case 'gadget':
-        return 'bg-violet-50/90 text-violet-700 border-violet-200/80';
+        return 'bg-[#26103D]/95 text-[#C084FC] border-[#A855F7]/60 shadow-[0_2px_10px_rgba(168,85,247,0.2)]';
       default:
-        return 'bg-slate-50/90 text-slate-700 border-slate-200/80';
+        return 'bg-[#181A26]/95 text-[#C4B5FD] border-[#8B5CF6]/40 shadow-xs';
     }
   };
 
   return (
-    <div className="min-h-screen bg-slate-100/90 flex flex-col font-sans text-slate-800">
+    <div className="min-h-screen bg-[#0D0E15] flex flex-col font-sans text-slate-200">
       <Navbar />
 
       <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-1 w-full">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
           <div>
-            <h1 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
-              My Rental Listings
+            <h1 className="text-2xl sm:text-3xl font-clash font-extrabold text-white tracking-tight">
+              My Rental <span className="text-[#A78BFA]">Listings</span>
             </h1>
-            <p className="text-xs sm:text-sm text-slate-500 mt-1">
+            <p className="text-xs sm:text-sm text-slate-400 mt-1">
               Manage your posted items, toggle availability, and track incoming student rentals.
             </p>
           </div>
 
           <Link
             to="/listings/new"
-            className="inline-flex items-center gap-2 px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold rounded-xl shadow-md shadow-indigo-600/20 active:scale-[0.98] transition-all self-start sm:self-auto cursor-pointer btn-press-snap"
+            className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#8B5CF6] hover:bg-[#7C3AED] text-white text-xs font-bold rounded-xl shadow-[0_0_20px_rgba(139,92,246,0.35)] active:scale-[0.98] transition-all self-start sm:self-auto cursor-pointer btn-press-snap"
           >
             <PlusCircle className="w-4 h-4" />
             <span>Post New Item</span>
@@ -80,29 +80,29 @@ const MyListings = () => {
         {loading && (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-pulse">
             {[1, 2, 3].map((i) => (
-              <div key={i} className="h-64 bg-slate-200/70 rounded-2xl"></div>
+              <div key={i} className="h-64 bg-[#141622] border border-[#26293D] rounded-2xl"></div>
             ))}
           </div>
         )}
 
         {error && (
-          <div className="p-6 rounded-2xl bg-rose-50 border border-rose-200 text-rose-700 text-center">
+          <div className="p-6 rounded-2xl bg-[#2B1118]/80 border border-[#E11D48]/50 text-rose-300 text-center">
             <p className="font-semibold text-sm">{error}</p>
           </div>
         )}
 
         {!loading && !error && listings.length === 0 && (
-          <div className="bg-white rounded-2xl border border-slate-200/90 p-12 text-center max-w-md mx-auto my-8 shadow-xs">
-            <div className="w-14 h-14 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center mx-auto mb-3 border border-indigo-100">
+          <div className="bg-[#141622] rounded-2xl border border-[#26293D] p-12 text-center max-w-md mx-auto my-8 shadow-2xl">
+            <div className="w-14 h-14 rounded-2xl bg-[#181A26] text-[#A78BFA] flex items-center justify-center mx-auto mb-3 border border-[#2D3147]">
               <ListOrdered className="w-7 h-7" />
             </div>
-            <h3 className="text-base font-bold text-slate-900">You haven't listed any items yet</h3>
-            <p className="mt-1 text-xs text-slate-500 leading-relaxed">
+            <h3 className="text-base font-bold text-white">You haven't listed any items yet</h3>
+            <p className="mt-1 text-xs text-slate-400 leading-relaxed">
               Have extra textbooks, an unused calculator, or lab supplies? List them to start earning on campus!
             </p>
             <Link
               to="/listings/new"
-              className="mt-6 inline-flex items-center gap-2 px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold rounded-xl transition-all shadow-xs btn-press-snap"
+              className="mt-6 inline-flex items-center gap-2 px-5 py-2.5 bg-[#8B5CF6] hover:bg-[#7C3AED] text-white text-xs font-bold rounded-xl transition-all shadow-[0_0_20px_rgba(139,92,246,0.35)] btn-press-snap"
             >
               <PlusCircle className="w-4 h-4" />
               <span>Create First Listing</span>
@@ -115,7 +115,7 @@ const MyListings = () => {
             {listings.map((item) => (
               <div
                 key={item._id}
-                className="group bg-white rounded-2xl border border-slate-200/90 hover:border-indigo-300 hover:shadow-lg hover:shadow-indigo-500/5 card-hover-lift transition-all flex flex-col justify-between overflow-hidden"
+                className="group bg-[#141622] rounded-2xl border border-[#26293D] hover:border-[#8B5CF6]/50 hover:shadow-[0_0_24px_rgba(139,92,246,0.18)] transition-all flex flex-col justify-between overflow-hidden"
               >
                 {/* 1. Shared Fixed-Aspect-Ratio Listing Image */}
                 <ListingImage
@@ -141,13 +141,13 @@ const MyListings = () => {
                     <span
                       className={`inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full border backdrop-blur-md shadow-xs ${
                         item.isAvailable
-                          ? 'bg-white/95 text-emerald-700 border-emerald-200/90'
-                          : 'bg-slate-900/90 text-slate-200 border-slate-800'
+                          ? 'bg-[#102A1E]/90 text-[#34D399] border-[#059669]/60'
+                          : 'bg-[#2B1118]/90 text-[#FB7185] border-[#E11D48]/60'
                       }`}
                     >
                       <span
                         className={`w-1.5 h-1.5 rounded-full ${
-                          item.isAvailable ? 'bg-emerald-500 animate-pulse' : 'bg-slate-400'
+                          item.isAvailable ? 'bg-emerald-400 animate-pulse' : 'bg-rose-400'
                         }`}
                       />
                       {item.isAvailable ? 'Available' : 'Rented / Busy'}
@@ -159,7 +159,7 @@ const MyListings = () => {
                 <div className="p-4 flex-1 flex flex-col justify-between">
                   <div>
                     <div className="flex items-center justify-between text-xs text-slate-400 mb-1.5">
-                      <span className="capitalize font-semibold text-slate-500 text-[11px]">
+                      <span className="capitalize font-semibold text-slate-400 text-[11px]">
                         {item.condition?.replace('_', ' ')}
                       </span>
                       <span className="inline-flex items-center gap-1 text-[11px] font-medium text-slate-400 truncate max-w-[120px]">
@@ -168,17 +168,17 @@ const MyListings = () => {
                       </span>
                     </div>
 
-                    <h3 className="font-bold text-slate-900 text-sm group-hover:text-indigo-600 transition-colors line-clamp-1">
+                    <h3 className="font-bold text-white text-sm group-hover:text-[#A78BFA] transition-colors line-clamp-1">
                       {item.title}
                     </h3>
-                    <p className="text-xs text-slate-500 line-clamp-2 mt-1 leading-relaxed">
+                    <p className="text-xs text-slate-400 line-clamp-2 mt-1 leading-relaxed">
                       {item.description}
                     </p>
                   </div>
 
-                  <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between">
+                  <div className="mt-4 pt-3 border-t border-[#1F2233] flex items-center justify-between">
                     <div className="flex items-baseline">
-                      <span className="text-base sm:text-lg font-black text-slate-900 tracking-tight">
+                      <span className="text-base sm:text-lg font-black text-[#A78BFA] tracking-tight">
                         ₹{item.pricePerDay}
                       </span>
                       <span className="text-[11px] text-slate-400 font-medium ml-1">/ day</span>
@@ -187,10 +187,10 @@ const MyListings = () => {
                 </div>
 
                 {/* 3. Host Action Footer */}
-                <div className="px-4 py-3 bg-slate-50/80 border-t border-slate-100 flex items-center justify-between">
+                <div className="px-4 py-3 bg-[#10121D] border-t border-[#1F2233] flex items-center justify-between">
                   <Link
                     to={`/listings/${item._id}`}
-                    className="text-xs font-semibold text-indigo-600 hover:text-indigo-700 inline-flex items-center gap-1"
+                    className="text-xs font-semibold text-[#A78BFA] hover:text-[#C4B5FD] inline-flex items-center gap-1 transition-colors"
                   >
                     <span>View Public Page</span>
                     <ExternalLink className="w-3.5 h-3.5" />
@@ -198,9 +198,9 @@ const MyListings = () => {
 
                   <Link
                     to={`/listings/${item._id}/edit`}
-                    className="px-3 py-1.5 bg-white border border-slate-200 hover:bg-slate-50 rounded-xl text-xs font-semibold text-slate-700 inline-flex items-center gap-1.5 transition-colors shadow-2xs btn-press-snap"
+                    className="px-3 py-1.5 bg-[#181A26] border border-[#26293D] hover:bg-[#1F2233] hover:border-[#8B5CF6]/50 rounded-xl text-xs font-semibold text-slate-200 inline-flex items-center gap-1.5 transition-colors shadow-2xs btn-press-snap"
                   >
-                    <Edit className="w-3.5 h-3.5 text-indigo-600" />
+                    <Edit className="w-3.5 h-3.5 text-[#A78BFA]" />
                     <span>Edit</span>
                   </Link>
                 </div>

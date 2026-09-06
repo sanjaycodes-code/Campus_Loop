@@ -33,7 +33,9 @@ const BookingsDashboard = () => {
   const [searchParams, setSearchParams] = useSearchParams();
 
   // Tab State: 'renter' (My Bookings) vs 'host' (Bookings on My Items)
-  const [activeTab, setActiveTab] = useState('renter');
+  const [activeTab, setActiveTab] = useState(
+    () => (searchParams.get('tab') === 'host' ? 'host' : 'renter')
+  );
 
   const [renterBookings, setRenterBookings] = useState([]);
   const [hostBookings, setHostBookings] = useState([]);
@@ -224,29 +226,29 @@ const BookingsDashboard = () => {
     switch (status) {
       case 'pending':
         return (
-          <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-amber-50 text-amber-700 border border-amber-200 text-xs font-bold">
-            <Clock className="w-3.5 h-3.5" />
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#2B1D0C]/95 text-[#FBBF24] border border-[#D97706]/60 text-xs font-bold shadow-[0_2px_10px_rgba(217,119,6,0.2)]">
+            <Clock className="w-3.5 h-3.5 text-[#FBBF24]" />
             <span>Pending Host Approval</span>
           </span>
         );
       case 'confirmed':
         return (
-          <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 text-xs font-bold">
-            <CheckCircle className="w-3.5 h-3.5" />
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#0D2418]/95 text-[#34D399] border border-[#059669]/60 text-xs font-bold shadow-[0_2px_10px_rgba(5,150,105,0.2)]">
+            <CheckCircle className="w-3.5 h-3.5 text-[#34D399]" />
             <span>Confirmed & Locked</span>
           </span>
         );
       case 'completed':
         return (
-          <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-sky-50 text-sky-700 border border-sky-200 text-xs font-bold">
-            <CheckCircle className="w-3.5 h-3.5" />
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#0F1D33]/95 text-[#38BDF8] border border-[#0284C7]/60 text-xs font-bold shadow-[0_2px_10px_rgba(2,132,199,0.2)]">
+            <CheckCircle className="w-3.5 h-3.5 text-[#38BDF8]" />
             <span>Completed</span>
           </span>
         );
       case 'cancelled':
         return (
-          <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-rose-50 text-rose-700 border border-rose-200 text-xs font-bold">
-            <XCircle className="w-3.5 h-3.5" />
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#2B1118]/95 text-[#FB7185] border border-[#E11D48]/60 text-xs font-bold shadow-[0_2px_10px_rgba(225,29,72,0.2)]">
+            <XCircle className="w-3.5 h-3.5 text-[#FB7185]" />
             <span>Cancelled</span>
           </span>
         );
@@ -256,24 +258,24 @@ const BookingsDashboard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col">
+    <div className="min-h-screen bg-[#0D0E15] flex flex-col font-sans text-slate-200">
       <Navbar />
 
       {/* Cancel Confirmation Modal */}
       {cancelModalBooking && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-xs p-4">
-          <div className="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-100 animate-in fade-in zoom-in duration-150">
-            <div className="w-12 h-12 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center mb-4 border border-rose-100">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4">
+          <div className="bg-[#141622] rounded-2xl max-w-md w-full p-6 shadow-2xl border border-[#26293D] animate-in fade-in zoom-in duration-150">
+            <div className="w-12 h-12 rounded-xl bg-[#2B1118] text-[#FB7185] flex items-center justify-center mb-4 border border-[#E11D48]/50">
               <AlertCircle className="w-6 h-6" />
             </div>
-            <h3 className="text-lg font-bold text-slate-900">Cancel Rental Booking?</h3>
-            <p className="text-xs text-slate-600 mt-2">
+            <h3 className="text-lg font-clash font-bold text-white">Cancel Rental Booking?</h3>
+            <p className="text-xs text-slate-400 mt-2 leading-relaxed">
               Are you sure you want to cancel the booking for{' '}
-              <strong>"{cancelModalBooking.listing?.title}"</strong>? This will release the reserved date slot and make it available for other students.
+              <strong className="text-white">"{cancelModalBooking.listing?.title}"</strong>? This will release the reserved date slot and make it available for other students.
             </p>
 
             <div className="mt-4">
-              <label className="block text-xs font-semibold text-slate-700 mb-1">
+              <label className="block text-xs font-semibold text-slate-300 mb-1">
                 Reason for cancellation (Optional):
               </label>
               <input
@@ -281,7 +283,7 @@ const BookingsDashboard = () => {
                 value={cancelReason}
                 onChange={(e) => setCancelReason(e.target.value)}
                 placeholder="e.g. Schedule change, exam postponed..."
-                className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-900 focus:bg-white focus:outline-none focus:ring-1 focus:ring-sky-500"
+                className="w-full px-3 py-2.5 bg-[#0D0E15] border border-[#26293D] rounded-xl text-xs text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-[#8B5CF6]/40 focus:border-[#8B5CF6] transition-colors"
               />
             </div>
 
@@ -289,7 +291,7 @@ const BookingsDashboard = () => {
               <button
                 type="button"
                 onClick={() => setCancelModalBooking(null)}
-                className="px-4 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-100 rounded-xl transition-colors cursor-pointer"
+                className="px-4 py-2 text-xs font-semibold text-slate-300 hover:text-white hover:bg-[#1F2233] rounded-xl transition-colors cursor-pointer border border-[#26293D]"
               >
                 Keep Booking
               </button>
@@ -297,7 +299,7 @@ const BookingsDashboard = () => {
                 type="button"
                 onClick={handleCancelSubmit}
                 disabled={actionLoadingId === cancelModalBooking._id}
-                className="px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white text-xs font-semibold rounded-xl shadow-xs transition-all disabled:opacity-60 cursor-pointer inline-flex items-center gap-1.5"
+                className="px-4 py-2 bg-rose-600 hover:bg-rose-500 text-white text-xs font-bold rounded-xl shadow-[0_0_16px_rgba(225,29,72,0.35)] transition-all disabled:opacity-60 cursor-pointer inline-flex items-center gap-1.5"
               >
                 {actionLoadingId === cancelModalBooking._id ? 'Cancelling...' : 'Yes, Cancel Booking'}
               </button>
@@ -309,24 +311,24 @@ const BookingsDashboard = () => {
       {/* Main Content Area */}
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-1 w-full">
         {/* Header Title */}
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-6 border-b border-slate-200">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-6 border-b border-[#1F2233]">
           <div>
-            <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight">
-              Rentals & Bookings Dashboard
+            <h1 className="text-2xl sm:text-3xl font-clash font-extrabold text-white tracking-tight">
+              Rentals & <span className="text-[#A78BFA]">Bookings</span>
             </h1>
-            <p className="mt-1 text-xs sm:text-sm text-slate-500">
-              Track your active rentals, incoming borrower requests, and dates.
+            <p className="mt-1 text-xs sm:text-sm text-slate-400">
+              Track your active rentals, incoming borrower requests, and locked dates.
             </p>
           </div>
 
           {/* Tab Switcher Pills */}
-          <div className="flex items-center gap-2 p-1.5 bg-slate-200/80 rounded-2xl self-start sm:self-auto shadow-inner">
+          <div className="flex items-center gap-2 p-1.5 bg-[#141622] rounded-2xl border border-[#26293D] self-start sm:self-auto shadow-inner">
             <button
               onClick={() => setActiveTab('renter')}
               className={`px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                 activeTab === 'renter'
-                  ? 'bg-white text-sky-700 shadow-sm'
-                  : 'text-slate-600 hover:text-slate-900'
+                  ? 'bg-[#8B5CF6] text-white shadow-[0_0_16px_rgba(139,92,246,0.35)]'
+                  : 'text-slate-400 hover:text-white'
               }`}
             >
               My Bookings ({renterBookings.length})
@@ -335,8 +337,8 @@ const BookingsDashboard = () => {
               onClick={() => setActiveTab('host')}
               className={`px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                 activeTab === 'host'
-                  ? 'bg-white text-sky-700 shadow-sm'
-                  : 'text-slate-600 hover:text-slate-900'
+                  ? 'bg-[#8B5CF6] text-white shadow-[0_0_16px_rgba(139,92,246,0.35)]'
+                  : 'text-slate-400 hover:text-white'
               }`}
             >
               Bookings on My Items ({hostBookings.length})
@@ -346,23 +348,23 @@ const BookingsDashboard = () => {
 
         {/* Payment Success & Confirmation Banner */}
         {paymentSuccessNotice && (
-          <div className="mt-6 p-4.5 rounded-2xl bg-gradient-to-r from-emerald-50 to-teal-50 border border-emerald-200 text-emerald-950 flex items-center justify-between shadow-xs animate-in fade-in slide-in-from-top-2">
+          <div className="mt-6 p-4.5 rounded-2xl bg-[#0D2418]/90 border border-[#059669]/60 text-emerald-200 flex items-center justify-between shadow-[0_0_24px_rgba(5,150,105,0.2)] animate-in fade-in slide-in-from-top-2">
             <div className="flex items-center gap-3.5">
               <div className="w-10 h-10 rounded-xl bg-emerald-500 text-white flex items-center justify-center shrink-0 shadow-md shadow-emerald-500/20">
                 <CheckCircle className="w-6 h-6" />
               </div>
               <div>
-                <h4 className="text-sm font-extrabold text-emerald-950 flex items-center gap-2">
+                <h4 className="text-sm font-extrabold text-white flex items-center gap-2">
                   <span>🎉 Payment Successful & Booking Confirmed!</span>
-                  <span className="text-[10px] uppercase tracking-wider bg-emerald-200/70 text-emerald-900 px-2 py-0.5 rounded-md font-bold">
+                  <span className="text-[10px] uppercase tracking-wider bg-[#059669]/60 text-emerald-200 border border-emerald-400/40 px-2 py-0.5 rounded-md font-bold">
                     Dates Locked
                   </span>
                 </h4>
-                <p className="text-xs text-emerald-800 mt-0.5">
+                <p className="text-xs text-emerald-300 mt-0.5">
                   {paymentSuccessNotice.message ||
                     'Your Stripe payment was confirmed. The item is reserved for your dates.'}
                   {paymentSuccessNotice.sessionId && (
-                    <span className="ml-1.5 font-mono text-[11px] bg-emerald-100/80 px-1.5 py-0.5 rounded text-emerald-900">
+                    <span className="ml-1.5 font-mono text-[11px] bg-[#102A1E] px-1.5 py-0.5 rounded text-emerald-300 border border-emerald-500/30">
                       ID: {paymentSuccessNotice.sessionId.slice(-10)}
                     </span>
                   )}
@@ -371,7 +373,7 @@ const BookingsDashboard = () => {
             </div>
             <button
               onClick={() => setPaymentSuccessNotice(null)}
-              className="text-emerald-700 hover:text-emerald-950 p-2 rounded-xl hover:bg-emerald-100/60 transition-colors cursor-pointer"
+              className="text-emerald-400 hover:text-white p-2 rounded-xl hover:bg-emerald-950/60 transition-colors cursor-pointer"
             >
               <XCircle className="w-5 h-5" />
             </button>
@@ -383,18 +385,18 @@ const BookingsDashboard = () => {
           {loading ? (
             <div className="space-y-4 animate-pulse">
               {[1, 2, 3].map((i) => (
-                <div key={i} className="h-32 bg-white rounded-2xl border border-slate-200 p-6"></div>
+                <div key={i} className="h-32 bg-[#141622] rounded-2xl border border-[#26293D] p-6"></div>
               ))}
             </div>
           ) : currentBookings.length === 0 ? (
-            <div className="bg-white rounded-2xl border border-slate-200 p-12 text-center shadow-xs max-w-md mx-auto my-8">
-              <div className="w-14 h-14 rounded-2xl bg-sky-50 text-sky-600 flex items-center justify-center mx-auto mb-3 border border-sky-100">
+            <div className="bg-[#141622] rounded-2xl border border-[#26293D] p-12 text-center shadow-2xl max-w-md mx-auto my-8">
+              <div className="w-14 h-14 rounded-2xl bg-[#181A26] text-[#A78BFA] flex items-center justify-center mx-auto mb-3 border border-[#2D3147]">
                 <Calendar className="w-7 h-7" />
               </div>
-              <h3 className="text-base font-bold text-slate-900">
+              <h3 className="text-base font-bold text-white">
                 {activeTab === 'renter' ? 'No Rental Bookings Yet' : 'No Incoming Bookings Yet'}
               </h3>
-              <p className="mt-1 text-xs text-slate-500">
+              <p className="mt-1 text-xs text-slate-400 leading-relaxed">
                 {activeTab === 'renter'
                   ? 'Explore the campus marketplace to find calculators, textbooks, lab equipment, and tech gear for rent.'
                   : 'When fellow students request to rent items from your listings, their requests will appear here.'}
@@ -402,7 +404,7 @@ const BookingsDashboard = () => {
               <div className="mt-5">
                 <Link
                   to={activeTab === 'renter' ? '/marketplace' : '/listings/new'}
-                  className="px-4 py-2.5 bg-sky-600 hover:bg-sky-700 text-white text-xs font-semibold rounded-xl shadow-xs inline-block"
+                  className="px-5 py-2.5 bg-[#8B5CF6] hover:bg-[#7C3AED] text-white text-xs font-bold rounded-xl shadow-[0_0_20px_rgba(139,92,246,0.35)] inline-block transition-all btn-press-snap"
                 >
                   {activeTab === 'renter' ? 'Browse Marketplace' : 'List an Item'}
                 </Link>
@@ -419,12 +421,12 @@ const BookingsDashboard = () => {
               return (
                 <div
                   key={booking._id}
-                  className="bg-white rounded-2xl border border-slate-200 p-5 sm:p-6 shadow-xs hover:border-slate-300 transition-all flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6"
+                  className="bg-[#141622] rounded-2xl border border-[#26293D] p-5 sm:p-6 shadow-xl hover:border-[#8B5CF6]/40 transition-all flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6"
                 >
                   {/* Left Column: Item + Dates + Partner */}
                   <div className="flex items-start gap-4 flex-1">
                     {/* Item Thumbnail */}
-                    <div className="w-20 h-20 sm:w-24 sm:h-24 bg-slate-100 rounded-xl overflow-hidden border border-slate-200 flex-shrink-0 flex items-center justify-center">
+                    <div className="w-20 h-20 sm:w-24 sm:h-24 bg-[#0D0E15] rounded-xl overflow-hidden border border-[#26293D] flex-shrink-0 flex items-center justify-center">
                       {primaryImage ? (
                         <img
                           src={primaryImage}
@@ -433,10 +435,10 @@ const BookingsDashboard = () => {
                         />
                       ) : (
                         <div className="text-slate-400">
-                          {booking.listing?.category === 'device' && <Laptop className="w-8 h-8" />}
-                          {booking.listing?.category === 'book' && <BookOpen className="w-8 h-8" />}
+                          {booking.listing?.category === 'device' && <Laptop className="w-8 h-8 text-[#38BDF8]" />}
+                          {booking.listing?.category === 'book' && <BookOpen className="w-8 h-8 text-[#FBBF24]" />}
                           {booking.listing?.category === 'gadget' && (
-                            <Headphones className="w-8 h-8" />
+                            <Headphones className="w-8 h-8 text-[#C084FC]" />
                           )}
                         </div>
                       )}
@@ -446,59 +448,59 @@ const BookingsDashboard = () => {
                     <div className="space-y-1.5 flex-1 min-w-0">
                       <div className="flex items-center gap-2 flex-wrap">
                         {getStatusBadge(booking.status)}
-                        <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400">
+                        <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500">
                           ID: {booking._id.slice(-6)}
                         </span>
                       </div>
 
                       <Link
                         to={`/listings/${booking.listing?._id}`}
-                        className="font-bold text-slate-900 text-sm sm:text-base hover:text-sky-600 transition-colors block truncate"
+                        className="font-bold text-white text-sm sm:text-base hover:text-[#A78BFA] transition-colors block truncate"
                       >
                         {booking.listing?.title || 'Listing item'}
                       </Link>
 
                       {/* Dates Row */}
-                      <div className="flex items-center gap-4 text-xs text-slate-600 flex-wrap">
+                      <div className="flex items-center gap-4 text-xs text-slate-400 flex-wrap">
                         <div className="flex items-center gap-1.5">
-                          <Calendar className="w-3.5 h-3.5 text-sky-600" />
+                          <Calendar className="w-3.5 h-3.5 text-[#A78BFA]" />
                           <span>
-                            <strong>{new Date(booking.startDate).toLocaleDateString()}</strong> →{' '}
-                            <strong>{new Date(booking.endDate).toLocaleDateString()}</strong> (
+                            <strong className="text-white">{new Date(booking.startDate).toLocaleDateString()}</strong> →{' '}
+                            <strong className="text-white">{new Date(booking.endDate).toLocaleDateString()}</strong> (
                             {booking.totalDays} Days)
                           </span>
                         </div>
                       </div>
 
                       {/* Partner Contact Row */}
-                      <div className="flex items-center gap-2 text-xs text-slate-500 pt-1">
-                        <span className="font-semibold text-slate-700">
+                      <div className="flex items-center gap-2 text-xs text-slate-400 pt-1">
+                        <span className="font-semibold text-slate-300">
                           {activeTab === 'renter' ? 'Host:' : 'Renter:'}
                         </span>
-                        <span>{partner?.name || 'Student'}</span>
-                        <span className="text-slate-300">•</span>
-                        <span className="text-[11px]">{partner?.email}</span>
+                        <span className="text-white">{partner?.name || 'Student'}</span>
+                        <span className="text-slate-600">•</span>
+                        <span className="text-[11px] text-slate-400">{partner?.email}</span>
                       </div>
                     </div>
                   </div>
 
                   {/* Middle Column: Financial Breakdown */}
-                  <div className="p-3 bg-slate-50 rounded-xl border border-slate-200 text-xs space-y-1 min-w-[170px]">
-                    <div className="flex justify-between text-slate-500">
+                  <div className="p-3.5 bg-[#0D0E15] rounded-xl border border-[#26293D] text-xs space-y-1 min-w-[180px]">
+                    <div className="flex justify-between text-slate-400">
                       <span>Daily Rate:</span>
-                      <span className="font-semibold text-slate-800">
+                      <span className="font-semibold text-slate-200">
                         ₹{booking.pricePerDay}/day
                       </span>
                     </div>
-                    <div className="flex justify-between text-slate-500">
+                    <div className="flex justify-between text-slate-400">
                       <span>Security Deposit:</span>
-                      <span className="font-semibold text-slate-800">
+                      <span className="font-semibold text-slate-200">
                         ₹{booking.securityDeposit}
                       </span>
                     </div>
-                    <div className="flex justify-between pt-1 border-t border-slate-200 font-bold text-slate-900">
+                    <div className="flex justify-between pt-1.5 border-t border-[#1F2233] font-bold text-slate-200">
                       <span>Total Amount:</span>
-                      <span className="text-sky-600 font-extrabold">₹{booking.totalAmount + booking.securityDeposit}</span>
+                      <span className="text-[#A78BFA] font-black text-sm">₹{booking.totalAmount + booking.securityDeposit}</span>
                     </div>
                   </div>
 
@@ -508,9 +510,9 @@ const BookingsDashboard = () => {
                     <button
                       type="button"
                       onClick={() => handleChat(booking.listing?._id, partner?._id)}
-                      className="flex-1 lg:flex-none inline-flex items-center justify-center gap-1.5 px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-semibold rounded-xl transition-colors cursor-pointer"
+                      className="flex-1 lg:flex-none inline-flex items-center justify-center gap-1.5 px-3.5 py-2 bg-[#181A26] hover:bg-[#1F2233] text-slate-200 text-xs font-semibold rounded-xl border border-[#26293D] transition-colors cursor-pointer"
                     >
-                      <MessageSquare className="w-3.5 h-3.5 text-sky-600" />
+                      <MessageSquare className="w-3.5 h-3.5 text-[#A78BFA]" />
                       <span>Chat</span>
                     </button>
 
@@ -520,7 +522,7 @@ const BookingsDashboard = () => {
                         type="button"
                         onClick={() => handleConfirm(booking._id)}
                         disabled={actionLoadingId === booking._id}
-                        className="flex-1 lg:flex-none inline-flex items-center justify-center gap-1.5 px-3 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold rounded-xl shadow-xs transition-all cursor-pointer"
+                        className="flex-1 lg:flex-none inline-flex items-center justify-center gap-1.5 px-3.5 py-2 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold rounded-xl shadow-[0_0_16px_rgba(16,185,129,0.3)] transition-all cursor-pointer"
                       >
                         <CheckCircle className="w-3.5 h-3.5" />
                         <span>Accept Booking</span>
@@ -533,7 +535,7 @@ const BookingsDashboard = () => {
                         type="button"
                         onClick={() => handleCheckout(booking._id)}
                         disabled={actionLoadingId === booking._id}
-                        className="flex-1 lg:flex-none inline-flex items-center justify-center gap-1.5 px-3 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold rounded-xl shadow-xs transition-all cursor-pointer"
+                        className="flex-1 lg:flex-none inline-flex items-center justify-center gap-1.5 px-3.5 py-2 bg-[#8B5CF6] hover:bg-[#7C3AED] text-white text-xs font-bold rounded-xl shadow-[0_0_16px_rgba(139,92,246,0.35)] transition-all cursor-pointer"
                       >
                         <CreditCard className="w-3.5 h-3.5" />
                         <span>Pay with Stripe</span>
@@ -545,7 +547,7 @@ const BookingsDashboard = () => {
                       <button
                         type="button"
                         onClick={() => setCancelModalBooking(booking)}
-                        className="flex-1 lg:flex-none inline-flex items-center justify-center gap-1.5 px-3 py-2 bg-rose-50 hover:bg-rose-100 text-rose-600 text-xs font-semibold rounded-xl border border-rose-200 transition-colors cursor-pointer"
+                        className="flex-1 lg:flex-none inline-flex items-center justify-center gap-1.5 px-3.5 py-2 bg-[#2B1118]/80 hover:bg-[#3D1823] text-rose-300 text-xs font-semibold rounded-xl border border-[#E11D48]/50 transition-colors cursor-pointer"
                       >
                         <XCircle className="w-3.5 h-3.5" />
                         <span>{activeTab === 'host' ? 'Decline / Cancel' : 'Cancel'}</span>

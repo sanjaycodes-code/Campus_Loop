@@ -14,7 +14,24 @@ export const AuthProvider = ({ children }) => {
    * Verify session on app load or page refresh using GET /api/auth/me
    */
   const loadUserFromToken = useCallback(async () => {
-    const storedToken = localStorage.getItem('campusloop_token');
+    let storedToken = localStorage.getItem('campusloop_token');
+
+    // In local dev mode, allow ?demo=true to auto-authenticate as guest demo user for quick previews
+    if (!storedToken && import.meta.env.DEV) {
+      try {
+        const params = new URLSearchParams(window.location.search);
+        if (params.get('demo') === 'true') {
+          const guestRes = await api.post('/auth/guest-login');
+          if (guestRes.data?.success && guestRes.data?.token) {
+            storedToken = guestRes.data.token;
+            localStorage.setItem('campusloop_token', storedToken);
+          }
+        }
+      } catch (err) {
+        console.warn('Auto guest login error:', err);
+      }
+    }
+
     if (!storedToken) {
       setToken(null);
       setUser(null);
