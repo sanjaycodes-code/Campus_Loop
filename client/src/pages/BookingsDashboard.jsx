@@ -41,7 +41,7 @@ const BookingsDashboard = () => {
   const [hostBookings, setHostBookings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [actionLoadingId, setActionLoadingId] = useState(null);
-  const [paymentSuccessNotice, setPaymentSuccessNotice] = useState(null);
+  const [paymentNotice, setPaymentNotice] = useState(null);
 
   // Cancel Modal State
   const [cancelModalBooking, setCancelModalBooking] = useState(null);
@@ -75,41 +75,93 @@ const BookingsDashboard = () => {
     const sessionId = searchParams.get('session_id');
     const bookingId = searchParams.get('booking_id');
 
-    if (status === 'success') {
-      setPaymentSuccessNotice({
-        sessionId: sessionId || 'cs_test_session',
+    if (status === 'success' && (sessionId || bookingId)) {
+      // 1. Show honest in-progress verification notice (do NOT claim confirmed yet!)
+      setPaymentNotice({
+        status: 'verifying',
+        sessionId: sessionId || 'Stripe Session',
         bookingId,
-        message: 'Payment received! Your rental booking is locked and confirmed.',
+        message: 'Payment received! Verifying transaction with Stripe and locking rental dates...',
       });
 
-      // Trigger instant webhook simulation if using test flow
-      const triggerConfirmation = async () => {
+      // 2. Call backend verification endpoint
+      const verifyAndConfirm = async () => {
         try {
-          if (sessionId || bookingId) {
-            await api.post('/webhooks/stripe', {
-              type: 'checkout.session.completed',
-              data: {
-                object: {
-                  id: sessionId,
-                  client_reference_id: bookingId,
-                  payment_intent: `pi_test_${Date.now()}`,
-                  metadata: { bookingId },
-                },
-              },
+          const res = await api.post('/bookings/verify-session', {
+            sessionId,
+            bookingId,
+          });
+
+          if (res.data?.success && res.data?.confirmed) {
+            // Updated to confirmed!
+            const updatedBooking = res.data.booking;
+            setPaymentNotice({
+              status: 'confirmed',
+              sessionId: updatedBooking?.stripe?.checkoutSessionId || sessionId,
+              bookingId: updatedBooking?._id || bookingId,
+              message: 'Payment confirmed! Your rental dates are locked and confirmed.',
+            });
+
+            // Update local state immediately so button disappears and card changes instantly
+            if (updatedBooking?._id) {
+              setRenterBookings((prev) =>
+                prev.map((b) =>
+                  b._id === updatedBooking._id
+                    ? {
+                        ...b,
+                        ...updatedBooking,
+                        status: 'confirmed',
+                        stripe: {
+                          ...b.stripe,
+                          ...updatedBooking.stripe,
+                          paymentStatus: 'paid',
+                        },
+                      }
+                    : b
+                )
+              );
+            }
+          } else {
+            // Still waiting for payment or async processing
+            setPaymentNotice({
+              status: 'pending',
+              sessionId,
+              bookingId,
+              message:
+                res.data?.message ||
+                'Payment received. Waiting for final confirmation from payment provider...',
             });
           }
-        } catch (e) {
-          // Handled or signature enforced
+        } catch (err) {
+          console.error('Payment verification error:', err);
+          setPaymentNotice({
+            status: 'pending',
+            sessionId,
+            bookingId,
+            message: 'Payment received. Verifying with payment provider...',
+          });
         } finally {
           fetchBookings();
         }
       };
 
-      triggerConfirmation();
+      verifyAndConfirm();
 
-      setTimeout(() => {
-        setSearchParams({}, { replace: true });
-      }, 3000);
+      // Clear search params after a brief window so refresh doesn't re-trigger
+      const timer = setTimeout(() => {
+        setSearchParams(
+          (prev) => {
+            const next = new URLSearchParams(prev);
+            next.delete('status');
+            next.delete('session_id');
+            next.delete('booking_id');
+            return next;
+          },
+          { replace: true }
+        );
+      }, 5000);
+
+      return () => clearTimeout(timer);
     }
   }, [searchParams, setSearchParams, fetchBookings]);
 
@@ -123,10 +175,38 @@ const BookingsDashboard = () => {
 
     const handleBookingConfirmed = (data) => {
       console.log('[Socket.io] Booking confirmed:', data);
-      setPaymentSuccessNotice({
-        sessionId: data.booking?.stripe?.checkoutSessionId || 'Stripe Webhook Verified',
+      setPaymentNotice({
+        status: 'confirmed',
+        sessionId: data.booking?.stripe?.checkoutSessionId || 'Stripe Verified',
         message: data.message || 'Payment confirmed and dates locked!',
       });
+      // Update local state immediately
+      if (data.booking?._id) {
+        setRenterBookings((prev) =>
+          prev.map((b) =>
+            b._id === data.booking._id
+              ? {
+                  ...b,
+                  ...data.booking,
+                  status: 'confirmed',
+                  stripe: { ...b.stripe, ...data.booking.stripe, paymentStatus: 'paid' },
+                }
+              : b
+          )
+        );
+        setHostBookings((prev) =>
+          prev.map((b) =>
+            b._id === data.booking._id
+              ? {
+                  ...b,
+                  ...data.booking,
+                  status: 'confirmed',
+                  stripe: { ...b.stripe, ...data.booking.stripe, paymentStatus: 'paid' },
+                }
+              : b
+          )
+        );
+      }
       fetchBookings();
     };
 
@@ -346,34 +426,69 @@ const BookingsDashboard = () => {
           </div>
         </div>
 
-        {/* Payment Success & Confirmation Banner */}
-        {paymentSuccessNotice && (
-          <div className="mt-6 p-4.5 rounded-2xl bg-[#0D2418]/90 border border-[#059669]/60 text-emerald-200 flex items-center justify-between shadow-[0_0_24px_rgba(5,150,105,0.2)] animate-in fade-in slide-in-from-top-2">
+        {/* Payment Notice Banner (Honest state: Verifying vs Confirmed vs Pending) */}
+        {paymentNotice && (
+          <div
+            className={`mt-6 p-4.5 rounded-2xl border flex items-center justify-between shadow-xl animate-in fade-in slide-in-from-top-2 ${
+              paymentNotice.status === 'confirmed'
+                ? 'bg-[#0D2418]/90 border-[#059669]/60 text-emerald-200 shadow-[0_0_24px_rgba(5,150,105,0.2)]'
+                : 'bg-[#2B1D0C]/90 border-[#D97706]/60 text-amber-200 shadow-[0_0_24px_rgba(217,119,6,0.2)]'
+            }`}
+          >
             <div className="flex items-center gap-3.5">
-              <div className="w-10 h-10 rounded-xl bg-emerald-500 text-white flex items-center justify-center shrink-0 shadow-md shadow-emerald-500/20">
-                <CheckCircle className="w-6 h-6" />
+              <div
+                className={`w-10 h-10 rounded-xl text-white flex items-center justify-center shrink-0 shadow-md ${
+                  paymentNotice.status === 'confirmed'
+                    ? 'bg-emerald-500 shadow-emerald-500/20'
+                    : 'bg-amber-500 shadow-amber-500/20'
+                }`}
+              >
+                {paymentNotice.status === 'confirmed' ? (
+                  <CheckCircle className="w-6 h-6" />
+                ) : (
+                  <div className="w-5 h-5 border-2 border-white/40 border-t-white rounded-full animate-spin"></div>
+                )}
               </div>
               <div>
                 <h4 className="text-sm font-extrabold text-white flex items-center gap-2">
-                  <span>🎉 Payment Successful & Booking Confirmed!</span>
-                  <span className="text-[10px] uppercase tracking-wider bg-[#059669]/60 text-emerald-200 border border-emerald-400/40 px-2 py-0.5 rounded-md font-bold">
-                    Dates Locked
+                  <span>
+                    {paymentNotice.status === 'confirmed'
+                      ? '🎉 Payment Successful & Booking Confirmed!'
+                      : '⏳ Payment Received — Confirming Reservation...'}
+                  </span>
+                  <span
+                    className={`text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-md font-bold border ${
+                      paymentNotice.status === 'confirmed'
+                        ? 'bg-[#059669]/60 text-emerald-200 border-emerald-400/40'
+                        : 'bg-[#D97706]/60 text-amber-200 border-amber-400/40 animate-pulse'
+                    }`}
+                  >
+                    {paymentNotice.status === 'confirmed' ? 'Dates Locked' : 'Verifying'}
                   </span>
                 </h4>
-                <p className="text-xs text-emerald-300 mt-0.5">
-                  {paymentSuccessNotice.message ||
-                    'Your Stripe payment was confirmed. The item is reserved for your dates.'}
-                  {paymentSuccessNotice.sessionId && (
-                    <span className="ml-1.5 font-mono text-[11px] bg-[#102A1E] px-1.5 py-0.5 rounded text-emerald-300 border border-emerald-500/30">
-                      ID: {paymentSuccessNotice.sessionId.slice(-10)}
+                <p
+                  className={`text-xs mt-0.5 ${
+                    paymentNotice.status === 'confirmed' ? 'text-emerald-300' : 'text-amber-300'
+                  }`}
+                >
+                  {paymentNotice.message}
+                  {paymentNotice.sessionId && (
+                    <span
+                      className={`ml-1.5 font-mono text-[11px] px-1.5 py-0.5 rounded border ${
+                        paymentNotice.status === 'confirmed'
+                          ? 'bg-[#102A1E] text-emerald-300 border-emerald-500/30'
+                          : 'bg-[#1D1409] text-amber-300 border-amber-500/30'
+                      }`}
+                    >
+                      ID: {paymentNotice.sessionId.slice(-10)}
                     </span>
                   )}
                 </p>
               </div>
             </div>
             <button
-              onClick={() => setPaymentSuccessNotice(null)}
-              className="text-emerald-400 hover:text-white p-2 rounded-xl hover:bg-emerald-950/60 transition-colors cursor-pointer"
+              onClick={() => setPaymentNotice(null)}
+              className="text-slate-400 hover:text-white p-2 rounded-xl hover:bg-white/10 transition-colors cursor-pointer"
             >
               <XCircle className="w-5 h-5" />
             </button>

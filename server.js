@@ -109,6 +109,9 @@ io.on('connection', (socket) => {
 // Make io accessible in Express routes/middleware via req.app.get('io')
 app.set('io', io);
 
+// Enable CORS for Express REST endpoints (Placed before routes & webhooks)
+app.use(cors(corsOptions));
+
 // Stripe Webhook MUST be registered BEFORE express.json() to preserve raw Buffer body for signature verification
 app.use(
   '/api/webhooks/stripe',
@@ -119,9 +122,6 @@ app.use(
 // Body Parser Middleware (10mb limit to support photo uploads)
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
-
-// Enable CORS for Express REST endpoints
-app.use(cors(corsOptions));
 
 // Health Check Routes (For external keep-alive cron pings & monitoring)
 app.get(['/health', '/api/health'], (req, res) => {

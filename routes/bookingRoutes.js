@@ -4,6 +4,7 @@ const {
   createBooking,
   getBookings,
   createCheckoutSession,
+  verifyCheckoutSession,
   confirmBooking,
   cancelBooking,
 } = require('../controllers/bookingController');
@@ -14,6 +15,7 @@ router.use(protect);
 
 router.post('/', createBooking);
 router.get('/', getBookings);
+router.post('/verify-session', verifyCheckoutSession);
 router.post('/:id/checkout', createCheckoutSession);
 router.patch('/:id/confirm', confirmBooking);
 router.patch('/:id/cancel', cancelBooking);

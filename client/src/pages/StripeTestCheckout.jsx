@@ -22,24 +22,17 @@ const StripeTestCheckout = () => {
     e.preventDefault();
     setProcessing(true);
     try {
-      await api.post('/webhooks/stripe', {
-        type: 'checkout.session.completed',
-        data: {
-          object: {
-            id: sessionId,
-            client_reference_id: bookingId,
-            payment_intent: `pi_test_${Date.now()}`,
-            metadata: { bookingId },
-          },
-        },
+      await api.post('/bookings/verify-session', {
+        sessionId,
+        bookingId,
       });
     } catch (err) {
-      console.log('Webhook call:', err);
+      console.log('Session verification call:', err);
     }
     setTimeout(() => {
-      // Redirect back with session_id
+      // Redirect back with session_id and booking_id
       navigate(`/bookings?session_id=${sessionId}&status=success&booking_id=${bookingId}`);
-    }, 800);
+    }, 600);
   };
 
   const handleCancel = () => {
