@@ -265,42 +265,94 @@ const Marketplace = () => {
     <div className="min-h-screen bg-slate-100/90 flex flex-col font-sans text-slate-800">
       <Navbar />
 
-      {/* Hero / Banner Header with GSAP Scrubbed Zoom (Bold Collegiate Night Anchor) */}
+      {/* ========================================================================= */}
+      {/* HERO SECTION — Dark Modern NFT-Marketplace Aesthetic (Review Prototype) */}
+      {/* ========================================================================= */}
       <section
         ref={heroContainerRef}
-        className="relative bg-slate-900 border-b border-slate-800/90 py-8 px-4 sm:px-6 lg:px-8 overflow-hidden text-white shadow-xs"
+        className="relative bg-[#0D0E15] border-b border-[#1F2233] pt-12 pb-14 px-4 sm:px-6 lg:px-8 overflow-hidden text-white"
       >
-        {/* Deep ambient radial glow and gradient mesh */}
+        {/* Ambient Purple-to-Violet Glow Overlay (Restrained, not solid) */}
         <div
           ref={heroVisualRef}
-          className="absolute inset-0 bg-gradient-to-r from-indigo-950 via-slate-900 to-indigo-900 pointer-events-none origin-center opacity-95"
+          className="absolute inset-0 pointer-events-none origin-center"
+          style={{
+            background:
+              'radial-gradient(ellipse 80% 65% at 50% -10%, rgba(139, 92, 246, 0.22) 0%, rgba(99, 102, 241, 0.08) 45%, transparent 75%)',
+          }}
         />
-        <div className="absolute top-0 right-1/4 w-96 h-96 bg-indigo-600/15 rounded-full blur-3xl pointer-events-none" />
+        {/* Subtle grid pattern / grain texture backdrop */}
+        <div className="absolute inset-0 opacity-[0.035] pointer-events-none bg-[radial-gradient(#ffffff_1px,transparent_1px)] [background-size:24px_24px]" />
+        {/* Bottom subtle dark fade to section boundary */}
+        <div className="absolute inset-x-0 bottom-0 h-10 bg-gradient-to-t from-[#0D0E15] to-transparent pointer-events-none" />
 
         <div
           ref={heroTextRef}
-          className="max-w-7xl mx-auto flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 relative z-10"
+          className="max-w-7xl mx-auto relative z-10 space-y-8"
         >
-          <div>
-            <div className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-indigo-900/70 border border-indigo-700/60 text-indigo-200 text-[11px] font-semibold mb-2.5 shadow-2xs">
-              <ShieldCheck className="w-3.5 h-3.5 text-indigo-400" />
-              <span>NIT Durgapur Verified Peer Network</span>
+          {/* Top Row: Title, Subtitle, & Primary Pill CTA */}
+          <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6">
+            <div className="max-w-2xl space-y-3.5">
+              {/* Verified Pill Badge */}
+              <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#181A26] border border-[#2D3147] text-[#C4B5FD] text-xs font-semibold shadow-inner">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#A78BFA] animate-pulse" />
+                <ShieldCheck className="w-3.5 h-3.5 text-[#A78BFA]" />
+                <span>NIT Durgapur Verified Peer Network</span>
+              </div>
+
+              {/* Large Bold Serif Headline */}
+              <h1 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-white leading-[1.12]">
+                Campus Rental <span className="italic font-normal text-[#C4B5FD]">Marketplace</span>
+              </h1>
+
+              {/* Supporting Sans-Serif Subtext */}
+              <p className="text-sm sm:text-base text-slate-400 font-sans font-normal leading-relaxed max-w-xl">
+                Borrow and exchange scientific calculators, lab drafters, engineering textbooks, and tech gear directly with verified peers on campus.
+              </p>
             </div>
-            <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
-              Campus Rental Marketplace
-            </h1>
-            <p className="mt-1.5 text-xs sm:text-sm text-slate-300 font-normal max-w-xl leading-relaxed">
-              Borrow & share scientific calculators, engineering textbooks, lab supplies, and tech accessories safely with peers on campus.
-            </p>
+
+            {/* Pill-shaped CTAs */}
+            <div className="flex items-center gap-3 self-start lg:self-end flex-wrap">
+              <Link
+                to="/listings/new"
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#8B5CF6] hover:bg-[#7C3AED] text-white font-sans font-semibold text-sm shadow-[0_0_24px_rgba(139,92,246,0.38)] border border-[#A78BFA]/30 btn-press-snap transition-all duration-200 cursor-pointer"
+              >
+                <PlusCircle className="w-4 h-4" />
+                <span>List an Item</span>
+              </Link>
+
+              <a
+                href="#marketplace-grid"
+                className="inline-flex items-center gap-2 px-5 py-3 rounded-full bg-[#141622] hover:bg-[#1C1F2E] text-slate-300 hover:text-white font-sans font-medium text-sm border border-[#26293D] transition-all duration-200 cursor-pointer"
+              >
+                <Sparkles className="w-4 h-4 text-[#A78BFA]" />
+                <span>Explore Gear</span>
+              </a>
+            </div>
           </div>
 
-          <Link
-            to="/listings/new"
-            className="self-start sm:self-center inline-flex items-center gap-2 px-4 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-xs sm:text-sm rounded-xl shadow-lg shadow-indigo-600/30 border border-indigo-500/40 btn-press-snap cursor-pointer transition-all"
-          >
-            <PlusCircle className="w-4 h-4" />
-            <span>List an Item</span>
-          </Link>
+          {/* Stats Row: Clean Dark Cards (NFT Marketplace Style) */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2">
+            {[
+              { label: 'Active Listings', value: '540+', sub: 'Available today' },
+              { label: 'Verified Students', value: '1.2k+', sub: '@nitdgp.ac.in' },
+              { label: 'Rental Success', value: '99.4%', sub: 'Zero disputes' },
+              { label: 'Platform Fee', value: '₹0', sub: 'Peer-to-peer' },
+            ].map((stat, i) => (
+              <div
+                key={i}
+                className="bg-[#141622]/90 hover:bg-[#181A28] border border-[#26293D] hover:border-[#383D59] rounded-2xl p-4 transition-colors duration-200 flex flex-col justify-between"
+              >
+                <div className="text-xl sm:text-2xl font-black text-white font-sans tracking-tight">
+                  {stat.value}
+                </div>
+                <div className="mt-1">
+                  <div className="text-xs font-semibold text-slate-300 font-sans">{stat.label}</div>
+                  <div className="text-[11px] text-slate-500 font-sans">{stat.sub}</div>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
@@ -449,7 +501,7 @@ const Marketplace = () => {
         </aside>
 
         {/* ================= RIGHT RESULTS AREA ================= */}
-        <main className="flex-1 bg-slate-100/70 p-4 sm:p-6 lg:p-8 space-y-6">
+        <main id="marketplace-grid" className="flex-1 bg-slate-100/70 p-4 sm:p-6 lg:p-8 space-y-6">
             {/* Top Search Bar & Sort Row */}
             <div className="bg-white p-3 sm:p-4 rounded-2xl border border-slate-200/80 shadow-xs flex flex-col sm:flex-row gap-3 items-stretch sm:items-center justify-between">
               {/* Search Box */}

@@ -6,6 +6,10 @@ export default {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+        serif: ['"Playfair Display"', 'Georgia', 'serif'],
+      },
       colors: {
         primary: {
           50: '#f0f9ff',
