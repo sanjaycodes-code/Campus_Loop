@@ -9,6 +9,7 @@ export default {
       fontFamily: {
         sans: ['"Plus Jakarta Sans"', 'sans-serif'],
         serif: ['"Playfair Display"', 'Georgia', 'serif'],
+        display: ['"Syne"', '"Plus Jakarta Sans"', 'sans-serif'],
       },
       colors: {
         primary: {

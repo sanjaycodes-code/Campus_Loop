@@ -79,6 +79,9 @@ const Marketplace = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
 
+  // Headline Font Choice for Dark NFT aesthetic ('syne' | 'serif')
+  const [headlineFont, setHeadlineFont] = useState('syne');
+
   // GSAP ScrollTrigger Hero Zoom & Parallax Hook
   const {
     containerRef: heroContainerRef,
@@ -272,17 +275,17 @@ const Marketplace = () => {
         ref={heroContainerRef}
         className="relative bg-[#0D0E15] border-b border-[#1F2233] pt-12 pb-14 px-4 sm:px-6 lg:px-8 overflow-hidden text-white"
       >
-        {/* Ambient Purple-to-Violet Glow Overlay (Restrained, not solid) */}
+        {/* Ambient Purple-to-Violet Glow Overlay (Restrained & dialed-back) */}
         <div
           ref={heroVisualRef}
           className="absolute inset-0 pointer-events-none origin-center"
           style={{
             background:
-              'radial-gradient(ellipse 80% 65% at 50% -10%, rgba(139, 92, 246, 0.22) 0%, rgba(99, 102, 241, 0.08) 45%, transparent 75%)',
+              'radial-gradient(ellipse 70% 50% at 50% -10%, rgba(139, 92, 246, 0.11) 0%, rgba(99, 102, 241, 0.03) 45%, transparent 70%)',
           }}
         />
         {/* Subtle grid pattern / grain texture backdrop */}
-        <div className="absolute inset-0 opacity-[0.035] pointer-events-none bg-[radial-gradient(#ffffff_1px,transparent_1px)] [background-size:24px_24px]" />
+        <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[radial-gradient(#ffffff_1px,transparent_1px)] [background-size:24px_24px]" />
         {/* Bottom subtle dark fade to section boundary */}
         <div className="absolute inset-x-0 bottom-0 h-10 bg-gradient-to-t from-[#0D0E15] to-transparent pointer-events-none" />
 
@@ -293,17 +296,52 @@ const Marketplace = () => {
           {/* Top Row: Title, Subtitle, & Primary Pill CTA */}
           <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6">
             <div className="max-w-2xl space-y-3.5">
-              {/* Verified Pill Badge */}
-              <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#181A26] border border-[#2D3147] text-[#C4B5FD] text-xs font-semibold shadow-inner">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#A78BFA] animate-pulse" />
-                <ShieldCheck className="w-3.5 h-3.5 text-[#A78BFA]" />
-                <span>NIT Durgapur Verified Peer Network</span>
+              {/* Badge & Font Comparison Switcher */}
+              <div className="flex items-center gap-3 flex-wrap">
+                {/* Verified Pill Badge */}
+                <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#181A26] border border-[#2D3147] text-[#C4B5FD] text-xs font-semibold shadow-inner">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#A78BFA] animate-pulse" />
+                  <ShieldCheck className="w-3.5 h-3.5 text-[#A78BFA]" />
+                  <span>NIT Durgapur Verified Peer Network</span>
+                </div>
+
+                {/* Interactive Font Preview Switcher */}
+                <div className="inline-flex items-center p-0.5 bg-[#141622] border border-[#26293D] rounded-full text-[10px] font-semibold">
+                  <button
+                    type="button"
+                    onClick={() => setHeadlineFont('syne')}
+                    className={`px-2.5 py-0.5 rounded-full transition-all cursor-pointer ${
+                      headlineFont === 'syne'
+                        ? 'bg-[#8B5CF6] text-white shadow-xs'
+                        : 'text-slate-400 hover:text-white'
+                    }`}
+                  >
+                    Syne (Geometric)
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setHeadlineFont('serif')}
+                    className={`px-2.5 py-0.5 rounded-full transition-all cursor-pointer ${
+                      headlineFont === 'serif'
+                        ? 'bg-[#8B5CF6] text-white shadow-xs'
+                        : 'text-slate-400 hover:text-white'
+                    }`}
+                  >
+                    Playfair (Serif)
+                  </button>
+                </div>
               </div>
 
-              {/* Large Bold Serif Headline */}
-              <h1 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-white leading-[1.12]">
-                Campus Rental <span className="italic font-normal text-[#C4B5FD]">Marketplace</span>
-              </h1>
+              {/* Dynamic Headline: Geometric Sans (Syne) vs Luxury Serif (Playfair) */}
+              {headlineFont === 'syne' ? (
+                <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-white leading-[1.12]">
+                  Campus Rental <span className="text-[#A78BFA]">Marketplace</span>
+                </h1>
+              ) : (
+                <h1 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-white leading-[1.12]">
+                  Campus Rental <span className="italic font-normal text-[#C4B5FD]">Marketplace</span>
+                </h1>
+              )}
 
               {/* Supporting Sans-Serif Subtext */}
               <p className="text-sm sm:text-base text-slate-400 font-sans font-normal leading-relaxed max-w-xl">
