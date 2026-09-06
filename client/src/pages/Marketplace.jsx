@@ -79,9 +79,9 @@ const Marketplace = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
 
-  // Headline Font Choice for Dark NFT aesthetic ('syne' | 'serif')
+  // Headline Font Choice for Dark NFT aesthetic ('clash' | 'space')
   const [headlineFont, setHeadlineFont] = useState(
-    searchParams.get('font') === 'serif' ? 'serif' : 'syne'
+    searchParams.get('font') === 'space' ? 'space' : 'clash'
   );
 
   // GSAP ScrollTrigger Hero Zoom & Parallax Hook
@@ -311,37 +311,37 @@ const Marketplace = () => {
                 <div className="inline-flex items-center p-0.5 bg-[#141622] border border-[#26293D] rounded-full text-[10px] font-semibold">
                   <button
                     type="button"
-                    onClick={() => setHeadlineFont('syne')}
+                    onClick={() => setHeadlineFont('clash')}
                     className={`px-2.5 py-0.5 rounded-full transition-all cursor-pointer ${
-                      headlineFont === 'syne'
+                      headlineFont === 'clash'
                         ? 'bg-[#8B5CF6] text-white shadow-xs'
                         : 'text-slate-400 hover:text-white'
                     }`}
                   >
-                    Syne (Geometric)
+                    Clash Display
                   </button>
                   <button
                     type="button"
-                    onClick={() => setHeadlineFont('serif')}
+                    onClick={() => setHeadlineFont('space')}
                     className={`px-2.5 py-0.5 rounded-full transition-all cursor-pointer ${
-                      headlineFont === 'serif'
+                      headlineFont === 'space'
                         ? 'bg-[#8B5CF6] text-white shadow-xs'
                         : 'text-slate-400 hover:text-white'
                     }`}
                   >
-                    Playfair (Serif)
+                    Space Grotesk
                   </button>
                 </div>
               </div>
 
-              {/* Dynamic Headline: Geometric Sans (Syne) vs Luxury Serif (Playfair) */}
-              {headlineFont === 'syne' ? (
-                <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-white leading-[1.12]">
+              {/* Dynamic Headline: Clash Display (Modern Geometric Neo-Grotesque) vs Space Grotesk (Tech Brutalist) */}
+              {headlineFont === 'clash' ? (
+                <h1 className="font-clash text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-white leading-[1.12]">
                   Campus Rental <span className="text-[#A78BFA]">Marketplace</span>
                 </h1>
               ) : (
-                <h1 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-white leading-[1.12]">
-                  Campus Rental <span className="italic font-normal text-[#C4B5FD]">Marketplace</span>
+                <h1 className="font-space text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-white leading-[1.12]">
+                  Campus Rental <span className="text-[#A78BFA]">Marketplace</span>
                 </h1>
               )}
 

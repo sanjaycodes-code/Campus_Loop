@@ -8,8 +8,9 @@ export default {
     extend: {
       fontFamily: {
         sans: ['"Plus Jakarta Sans"', 'sans-serif'],
-        serif: ['"Playfair Display"', 'Georgia', 'serif'],
-        display: ['"Syne"', '"Plus Jakarta Sans"', 'sans-serif'],
+        clash: ['"Clash Display"', '"Space Grotesk"', 'sans-serif'],
+        space: ['"Space Grotesk"', 'sans-serif'],
+        display: ['"Clash Display"', '"Space Grotesk"', 'sans-serif'],
       },
       colors: {
         primary: {
