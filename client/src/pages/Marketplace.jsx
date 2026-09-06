@@ -80,7 +80,9 @@ const Marketplace = () => {
   const [totalCount, setTotalCount] = useState(0);
 
   // Headline Font Choice for Dark NFT aesthetic ('syne' | 'serif')
-  const [headlineFont, setHeadlineFont] = useState('syne');
+  const [headlineFont, setHeadlineFont] = useState(
+    searchParams.get('font') === 'serif' ? 'serif' : 'syne'
+  );
 
   // GSAP ScrollTrigger Hero Zoom & Parallax Hook
   const {
